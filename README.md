@@ -1,10 +1,23 @@
 # KETPORT
 
-Professional portfolio website for Ketan Patil, focused on full-stack product engineering, AI systems integration, secure platform delivery, and production-grade user experiences.
+Professional portfolio website for Ketan Patil, built to present full-stack engineering, AI systems work, secure platform delivery, and production-grade user experience design.
 
 ## Overview
 
-KETPORT is a React and Vite-based portfolio application built to present professional work with a polished interface, strong motion design, and clear technical positioning. The site highlights project case studies, engineering services, technical stack, experience, and contact pathways in a format suitable for recruiters, collaborators, and hiring teams.
+KETPORT is a React and Vite-based portfolio application designed as a polished recruiter-facing and collaborator-facing presentation layer for projects, services, technical depth, and engineering identity. The project emphasizes clear content structure, refined motion systems, modern frontend architecture, and deployable production hosting.
+
+## Why This Project Exists
+
+A portfolio should do more than list technologies. KETPORT was built to communicate technical credibility, product taste, and implementation discipline through a real application rather than a static profile page. It serves as a central professional surface for showcasing project case studies, engineering capabilities, and contact pathways.
+
+## Key Features
+
+- Modern portfolio experience built with React, TypeScript, and Vite
+- Recruiter-friendly project and experience presentation
+- Motion-enhanced interface using Framer Motion
+- Structured content configuration for easier iteration and maintenance
+- Deployment-ready setup for production hosting on Vercel
+- Clear separation of application code, assets, and configuration
 
 ## Technology
 
@@ -36,3 +49,16 @@ npm run preview
 ## Deployment
 
 The project is configured for deployment on Vercel. The root workspace delegates application build and development commands to the `app/` package, and `vercel.json` provides the SPA rewrite configuration required for production hosting.
+
+## Engineering Notes
+
+- The root workspace keeps application commands centralized for simpler local and hosted workflows.
+- Content-driven configuration makes portfolio updates easier without deep structural changes.
+- The setup is intended to balance presentation quality with maintainability and deployment simplicity.
+
+## Recommended Next Improvements
+
+- Add screenshots or a live demo URL
+- Add Lighthouse or performance notes if measured
+- Add a section describing major UI/UX decisions
+- Add testing and linting workflow details if available
