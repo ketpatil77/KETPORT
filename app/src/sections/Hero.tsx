@@ -198,7 +198,7 @@ export function Hero() {
       <div className="container-large relative z-10">
         <div className="grid items-start gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-8 xl:gap-10">
           {/* ── Left column ── */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5 md:gap-6">
             <div className={shouldReduceMotion ? '' : 'hero-fade-up opacity-0'}>
               <span className="section-eyebrow">
                 <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
@@ -297,7 +297,7 @@ export function Hero() {
           {/* ── vCard aside — parallax on desktop ── */}
           <motion.aside
             style={lowPerformanceMode ? undefined : { y: cardParallaxY }}
-            className={`relative mx-auto w-full max-w-[18rem] lg:max-w-none origin-center ${
+            className={`relative mx-auto w-full max-w-[18rem] sm:max-w-[21rem] md:max-w-[24rem] lg:max-w-none origin-center ${
               lowPerformanceMode ? '' : 'hero-card-wrapper opacity-0'
             }`}
           >

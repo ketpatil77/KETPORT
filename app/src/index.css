@@ -86,6 +86,11 @@
     --color-3: 210 100% 63%;
     --color-4: 195 100% 63%;
     --color-5: 90 100% 63%;
+
+    /* Theme adaptive variables */
+    --hero-vcard-bg: linear-gradient(180deg, rgba(10, 10, 12, 0.96) 0%, rgba(10, 10, 12, 1) 12%);
+    --hero-vcard-name-gradient: linear-gradient(170deg, #fff 0%, rgba(255, 255, 255, 0.88) 50%, rgba(180, 200, 220, 0.72) 100%);
+    --tech-explorer-bg: linear-gradient(165deg, rgba(10, 10, 10, 0.7), rgba(24, 24, 24, 0.45));
   }
 
   * {
@@ -151,13 +156,18 @@
     --text-200: rgba(13, 12, 10, 0.85);
     --text-300: rgba(13, 12, 10, 0.72);
     --text-400: rgba(13, 12, 10, 0.62);
-    --text-500: rgba(13, 12, 10, 0.48);
+    --text-500: rgba(13, 12, 10, 0.60); /* Increased contrast for WCAG AA compliance */
 
     /* ── Accent — warm coral-orange replaces sapphire ── */
     --cyan-full: #e65100;
     --cyan-dim: rgba(230, 81, 0, 0.65);
     --cyan-glow: rgba(230, 81, 0, 0.10);
     --cyan-trace: rgba(230, 81, 0, 0.08);
+
+    /* Theme adaptive variables overrides */
+    --hero-vcard-bg: linear-gradient(180deg, rgba(250, 247, 244, 0.96) 0%, rgba(250, 247, 244, 1) 12%);
+    --hero-vcard-name-gradient: linear-gradient(170deg, #0d0c0a 0%, rgba(13, 12, 10, 0.88) 50%, rgba(50, 45, 40, 0.72) 100%);
+    --tech-explorer-bg: linear-gradient(165deg, rgba(250, 247, 244, 0.9), rgba(237, 232, 226, 0.85));
 
     /* ── Secondary — antique gold accent ── */
     --violet: #a07000;
@@ -199,6 +209,19 @@
     color: var(--text-200);
   }
 
+  /* ── Light glassmorphism overrides ── */
+  [data-theme="light"] .glass-card {
+    background: rgba(13, 12, 10, 0.025);
+    border-color: rgba(30, 20, 10, 0.08);
+    box-shadow: 0 4px 24px -1px rgba(30, 20, 10, 0.08);
+  }
+
+  [data-theme="light"] .glass {
+    background: rgba(250, 247, 244, 0.72);
+    border-color: var(--border-accent);
+    box-shadow: 0 8px 32px 0 rgba(30, 20, 10, 0.12);
+  }
+
   /* ── Light selection — WCAG AA contrast on ivory ── */
   [data-theme="light"] ::selection {
     background: rgba(230, 81, 0, 0.20);
@@ -215,19 +238,21 @@
   /* ── Layout shells ── */
   .section {
     position: relative;
-    overflow: hidden;
+    /* overflow:clip = visual clip only, does NOT create scroll container.
+       overflow:hidden BREAKS IntersectionObserver (Framer whileInView)! */
+    overflow: clip;
     padding-block: var(--layout-section-space);
   }
 
   .section-shell {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     padding-block: var(--layout-shell-space);
   }
 
   .section-sm {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     padding-block: var(--layout-shell-sm-space);
   }
 
@@ -680,7 +705,7 @@
   .grain-overlay {
     position: fixed;
     inset: 0;
-    z-index: 90;
+    z-index: 40; /* Lower than mobile nav overlay at 60 */
     pointer-events: none;
     opacity: 0.028;
     mix-blend-mode: overlay;
@@ -1521,7 +1546,7 @@
   .section { padding-top: 2.25rem; padding-bottom: 2.25rem; }
   .section-shell { padding-top: 2rem; padding-bottom: 2rem; }
   .section-sm { padding-top: 1.75rem; padding-bottom: 1.75rem; }
-  a[href], button, [role="button"] { display: inline-flex; min-height: var(--mobile-tap-target); align-items: center; }
+  button, .btn, .mobile-overlay-item, .mobile-overlay-cta, .portfolio-details-btn { min-height: var(--mobile-tap-target); }
   .proof-ribbon { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* HERO vCard */
   .hero-mobile-section { padding-top: 0; padding-bottom: 0; min-height: 100svh; display: flex; flex-direction: column; }
@@ -1530,13 +1555,13 @@
   .hero-vcard-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,2,2,0.10) 0%, rgba(2,2,2,0.18) 45%, rgba(2,2,2,0.92) 100%); pointer-events: none; }
   .hero-vcard-badge { position: absolute; top: 0.85rem; right: 0.85rem; z-index: 10; display: inline-flex; max-width: calc(100% - 1.5rem); align-items: center; gap: 0.45rem; padding: 0.35rem 0.78rem; border-radius: 999px; border: 1px solid var(--border-accent); background: rgba(2,2,2,0.72); backdrop-filter: blur(10px); font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan-full); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hero-vcard-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan-full); animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
-  .hero-vcard-content { position: relative; z-index: 10; margin-top: 0; padding: 1rem 1rem 3.25rem; display: flex; flex-direction: column; gap: 0.9rem; background: linear-gradient(180deg, rgba(250,247,244,0.96) 0%, rgba(250,247,244,1) 12%); }
+  .hero-vcard-content { position: relative; z-index: 10; margin-top: 0; padding: 1rem 1rem 3.25rem; display: flex; flex-direction: column; gap: 0.9rem; background: var(--hero-vcard-bg); }
   .hero-vcard-role { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan-full); }
-  .hero-vcard-name { font-family: var(--font-hero); font-size: clamp(1.9rem, 8vw, 2.5rem); line-height: 0.96; letter-spacing: -0.04em; background: linear-gradient(170deg, #fff 0%, rgba(255,255,255,0.88) 50%, rgba(180,200,220,0.72) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-vcard-name { font-family: var(--font-hero); font-size: clamp(1.9rem, 8vw, 2.5rem); line-height: 0.96; letter-spacing: -0.04em; background: var(--hero-vcard-name-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .hero-vcard-intro { font-size: 0.9rem; line-height: 1.56; color: var(--text-300); max-width: 36ch; }
-  .hero-vcard-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  .hero-vcard-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
   .hero-vcard-stat { display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; padding: 0.62rem 0.2rem; border-radius: 0.8rem; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.03); backdrop-filter: blur(8px); text-align: center; gap: 0.1rem; }
-  .hero-vcard-stat:last-child { grid-column: 1 / -1; }
+  .hero-vcard-stat:last-child { grid-column: auto; }
   .hero-vcard-stat-value { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--cyan-full); }
   .hero-vcard-stat-label { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-400); line-height: 1.3; }
   .hero-vcard-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
@@ -1620,7 +1645,7 @@
   .mobile-overlay-icon { display: inline-flex; width: 20px; flex-shrink: 0; align-items: center; justify-content: center; color: inherit; }
   .mobile-overlay-text { display: inline-flex; align-items: center; }
   .mobile-overlay-footer { position: sticky; bottom: 0; margin-top: auto; padding-top: 1.2rem; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.3rem); background: linear-gradient(180deg, rgba(19, 19, 19, 0), var(--bg-base) 48%); }
-  .mobile-overlay-cta { display: inline-flex; width: 100%; justify-content: center; gap: 0.6rem; border-radius: 1rem; padding: 0.9rem 1rem; background: var(--cyan-full); color: #020202; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; box-shadow: 0 14px 34px -14px rgba(34, 211, 238, 0.65); }
+  .mobile-overlay-cta { display: inline-flex; width: 100%; justify-content: center; gap: 0.6rem; border-radius: 1rem; padding: 0.9rem 1rem; background: var(--cyan-full); color: #020202; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; box-shadow: 0 14px 34px -14px var(--cyan-dim); }
 }
 
 /* ══════════════════════════════════════
@@ -1764,7 +1789,7 @@
 }
 
 /* ── Text shimmer (footer copyright) ── */
-.text-shimmer {
+.copyright-shimmer {
   background: linear-gradient(
     90deg,
     var(--text-400) 0%,
@@ -1897,3 +1922,121 @@
 @media (max-width: 767px) {
   .exp-h-strip { display: none !important; }
 }
+
+/* ── Lenis Smooth Scroll ── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+
+/* ══════════════════════════════════════
+   SCROLL-DRIVEN ANIMATIONS
+══════════════════════════════════════ */
+
+@keyframes badge-pop {
+  0%   { opacity: 0; transform: scale(0.85) translateY(6px); }
+  60%  { transform: scale(1.04) translateY(-1px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes glass-shine {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+.glass-card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.glass-card-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.glass-card-shine:hover::after {
+  animation: glass-shine 0.65s ease-in-out;
+}
+
+/* ══════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS
+══════════════════════════════════════ */
+
+/* contain removed — breaks IntersectionObserver (Framer whileInView) */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card-wrapper,
+  .hero-fade-up {
+    will-change: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ══════════════════════════════════════
+   MOBILE — tighter vertical rhythm
+══════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .section-shell {
+    padding-block: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .section {
+    padding-block: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .section-header {
+    margin-bottom: clamp(0.9rem, 3.5vw, 1.4rem);
+    gap: 0.45rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.45rem, 7vw, 2.1rem);
+  }
+
+  .section-copy {
+    font-size: 0.9rem;
+    line-height: 1.56;
+  }
+
+  .section-divider {
+    height: 0;
+    margin: 0;
+    background: none;
+  }
+
+  /* Disable backdrop-filter on mobile for performance */
+  .glass-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Disable ambient blobs on mobile */
+  .ambient-blob {
+    display: none !important;
+  }
+}
+

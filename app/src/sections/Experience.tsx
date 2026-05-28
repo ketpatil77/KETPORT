@@ -4,6 +4,7 @@ import { Briefcase, CheckCircle2, MapPin, Sparkles } from 'lucide-react';
 import { experienceConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 function parseDuration(duration: string): { years: number; months: number } {
   const now = new Date();
@@ -92,10 +93,9 @@ function ExperienceCard({
           : { delay: index * 0.06, duration: 0.34, ease: motionTokens.ease.standard }
       }
       whileHover={shouldReduceMotion ? undefined : { y: -4 }}
-      className="group relative flex h-full min-h-[19.5rem] flex-col overflow-hidden rounded-[1.4rem] border p-5 shadow-[0_18px_44px_-34px_rgba(0,0,0,0.85)] sm:p-6"
+      className="group relative flex h-full min-h-[19.5rem] flex-col overflow-hidden rounded-[1.4rem] border p-5 shadow-[0_18px_44px_-34px_rgba(0,0,0,0.85)] sm:p-6 glass-card"
       style={{
         borderColor: 'var(--border-subtle)',
-        background: 'linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015))',
       }}
     >
       <div
@@ -171,19 +171,21 @@ export function Experience() {
       />
 
       <div className="container-large relative z-10">
-        <div className="section-header">
-          <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-            {experienceConfig.label}
-          </span>
-          <AnimatedText
-            el="h2"
-            text={experienceConfig.heading}
-            type="words"
-            className="section-title max-w-3xl text-balance"
-          />
-          <p className="section-copy type-body max-w-2xl">{experienceConfig.description}</p>
-        </div>
+        <ScrollReveal direction="up" distance={20}>
+          <div className="section-header">
+            <span className="section-eyebrow">
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              {experienceConfig.label}
+            </span>
+            <AnimatedText
+              el="h2"
+              text={experienceConfig.heading}
+              type="words"
+              className="section-title max-w-3xl text-balance"
+            />
+            <p className="section-copy type-body max-w-2xl">{experienceConfig.description}</p>
+          </div>
+        </ScrollReveal>
 
         <div className="mt-8 grid gap-4 sm:mt-10 md:grid-cols-2 xl:grid-cols-3">
           {experienceConfig.items.map((item, index) => (

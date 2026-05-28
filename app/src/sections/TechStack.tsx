@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useThemeContext } from '@/context/ThemeContext';
 import { DragScroll } from '@/components/ui/drag-scroll';
 import { TiltCard } from '@/components/ui/tilt-card';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 const brandColorMapDark: Record<string, string> = {
   NVIDIA: '#84cc16',
@@ -60,10 +61,9 @@ function LogoChip({
       viewport={{ once: true, margin: '-20px' }}
       transition={shouldReduceMotion ? { duration: 0 } : { delay: idx * 0.03, duration: 0.28, ease: motionTokens.ease.standard }}
       whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.02 }}
-      className="group flex min-h-[3rem] min-w-[8.5rem] basis-[9.5rem] flex-none items-center justify-center gap-2 rounded-xl border px-4 py-3 text-center shadow-sm transition-colors"
+      className="group flex min-h-[3rem] min-w-[8.5rem] basis-[9.5rem] flex-none items-center justify-center gap-2 rounded-xl border px-4 py-3 text-center shadow-sm transition-colors glass-card"
       style={{
         borderColor: 'var(--border-subtle)',
-        background: 'linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015))',
       }}
     >
       <span className="h-2 w-2 rounded-full shrink-0" style={{ background: accent }} aria-hidden="true" />
@@ -102,24 +102,26 @@ export function TechStack() {
       />
 
       <div className="container-large relative z-10">
-        <div className="section-header items-start text-left">
-          <motion.span
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            className="section-eyebrow"
-          >
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-            {techStackConfig.label}
-          </motion.span>
-          <AnimatedText
-            el="h2"
-            text={techStackConfig.heading}
-            type="words"
-            className="section-title max-w-3xl text-balance"
-          />
-          <p className="section-copy type-body max-w-3xl">{techStackConfig.description}</p>
-        </div>
+        <ScrollReveal direction="up" distance={20}>
+          <div className="section-header items-start text-left">
+            <motion.span
+              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              className="section-eyebrow"
+            >
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              {techStackConfig.label}
+            </motion.span>
+            <AnimatedText
+              el="h2"
+              text={techStackConfig.heading}
+              type="words"
+              className="section-title max-w-3xl text-balance"
+            />
+            <p className="section-copy type-body max-w-3xl">{techStackConfig.description}</p>
+          </div>
+        </ScrollReveal>
 
         <motion.div
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 18 }}
@@ -189,7 +191,7 @@ export function TechStack() {
               transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.28, ease: motionTokens.ease.standard }}
               className="mx-auto w-full max-w-[18rem] rounded-[1.6rem] border border-[var(--border-dim)] px-4 py-4 text-center shadow-[0_24px_60px_-34px_rgba(0,0,0,0.8)]"
               style={{
-                background: 'linear-gradient(165deg, rgba(10,10,10,0.7), rgba(24,24,24,0.45))',
+                background: 'var(--tech-explorer-bg)',
                 backdropFilter: 'blur(10px)',
               }}
             >
@@ -204,7 +206,7 @@ export function TechStack() {
               </p>
             </motion.div>
 
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 mt-6 sm:mt-8 px-4 pb-4">
               {explorerItems.map((item, index) => {
                 const accent = brandColor(item.name, index, isLight);
                 return (
@@ -215,10 +217,9 @@ export function TechStack() {
                     viewport={{ once: true, margin: '-24px' }}
                     transition={shouldReduceMotion ? { duration: 0 } : { delay: index * 0.04, duration: 0.26, ease: motionTokens.ease.standard }}
                     whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.01 }}
-                    className="min-w-0 rounded-2xl border px-3 py-3 text-left shadow-[0_18px_40px_-26px_rgba(0,0,0,0.55)]"
+                    className="min-w-0 rounded-2xl border px-3 py-3 text-left shadow-[0_18px_40px_-26px_rgba(0,0,0,0.55)] glass-card"
                     style={{
                       borderColor: 'var(--border-dim)',
-                      background: 'linear-gradient(165deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025))',
                     }}
                   >
                     <p className="text-[0.54rem] font-bold uppercase tracking-[0.18em]" style={{ color: accent }}>
@@ -269,10 +270,6 @@ export function TechStack() {
               ) : (
                 <TabsList
                   className="scrollbar-none h-auto w-full justify-start overflow-x-auto rounded-xl border border-[var(--border-dim)] bg-[var(--bg-surface)] p-1.5 shadow-lg transition-colors"
-                  style={{
-                    maskImage: 'linear-gradient(to right, black 80%, transparent 100%)',
-                    WebkitMaskImage: 'linear-gradient(to right, black 80%, transparent 100%)',
-                  }}
                 >
                   {techStackConfig.groups.map((group) => (
                     <TabsTrigger
@@ -307,12 +304,11 @@ export function TechStack() {
                         className="h-full"
                       >
                         <div
-                          className="group relative flex h-full min-h-[11.25rem] flex-col gap-3 rounded-2xl border p-4 transition-all duration-300 hover:border-[var(--border-bright)]"
+                          className="group relative flex h-full min-h-[11.25rem] flex-col gap-3 rounded-2xl border p-4 transition-all duration-300 hover:border-[var(--border-bright)] glass-card"
                           tabIndex={0}
                           aria-label={`${item.name}. ${item.description}. Impact: ${item.impact}`}
                           style={{
                             borderColor: 'var(--border-subtle)',
-                            background: 'linear-gradient(165deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
                           }}
                         >
                           <div

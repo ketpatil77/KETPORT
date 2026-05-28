@@ -7,10 +7,12 @@ export const motionTokens = {
   ease: {
     standard: [0.22, 1, 0.36, 1] as const,
     smooth: [0.33, 1, 0.68, 1] as const,
+    bounce: [0.34, 1.56, 0.64, 1] as const,
   },
   spring: {
     soft: { type: 'spring', bounce: 0.24, duration: 0.72 } as const,
     hero: { type: 'spring', bounce: 0.28, duration: 1.0 } as const,
+    snappy: { type: 'spring', stiffness: 300, damping: 30 } as const,
   },
 } as const;
 
@@ -51,6 +53,29 @@ export const cardHoverVariants = {
     y: -4,
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
     transition: { duration: 0.3, ease: 'easeOut' },
+  },
+};
+
+// Section-level stagger reveal — use as container variant
+export const sectionStagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.09,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+// Child item for sectionStagger
+export const sectionItem = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
 };
 

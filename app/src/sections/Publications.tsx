@@ -5,6 +5,7 @@ import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
 import { publicationsConfig } from '@/config';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 function PaperFront({ item }: { item: (typeof publicationsConfig.items)[number] }) {
   return (
@@ -149,10 +150,9 @@ function PaperCard({
             ? { duration: 0 }
             : { duration: 0.3, ease: motionTokens.ease.standard, delay: index * 0.06 }
         }
-        className="relative flex min-h-[31rem] flex-col overflow-hidden rounded-2xl border p-5"
+        className="relative flex min-h-[31rem] flex-col overflow-hidden rounded-2xl border p-5 glass-card"
         style={{
           borderColor: 'var(--border-subtle)',
-          background: 'linear-gradient(165deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
         }}
       >
         <PaperFront item={item} />
@@ -183,10 +183,9 @@ function PaperCard({
         }}
       >
         <article
-          className="absolute inset-0 flex h-full flex-col overflow-hidden rounded-2xl border p-5"
+          className="absolute inset-0 flex h-full flex-col overflow-hidden rounded-2xl border p-5 glass-card"
           style={{
             borderColor: 'var(--border-subtle)',
-            background: 'linear-gradient(165deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
@@ -195,10 +194,9 @@ function PaperCard({
         </article>
 
         <article
-          className="absolute inset-0 flex h-full flex-col overflow-hidden rounded-2xl border p-5"
+          className="absolute inset-0 flex h-full flex-col overflow-hidden rounded-2xl border p-5 glass-card"
           style={{
             borderColor: 'var(--border-subtle)',
-            background: 'linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.018))',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
@@ -230,42 +228,45 @@ export function Publications() {
       />
 
       <div className="container-large relative z-10">
-        <div className="section-header items-start text-left">
-          <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-            {publicationsConfig.label}
-          </span>
-          <AnimatedText
-            el="h2"
-            text={publicationsConfig.heading}
-            type="words"
-            className="section-title max-w-4xl text-balance"
-          />
-          <p className="section-copy type-body max-w-3xl">{publicationsConfig.description}</p>
-        </div>
+        <ScrollReveal direction="up" distance={20}>
+          <div className="section-header items-start text-left">
+            <span className="section-eyebrow">
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              {publicationsConfig.label}
+            </span>
+            <AnimatedText
+              el="h2"
+              text={publicationsConfig.heading}
+              type="words"
+              className="section-title max-w-4xl text-balance"
+            />
+            <p className="section-copy type-body max-w-3xl">{publicationsConfig.description}</p>
+          </div>
+        </ScrollReveal>
 
-        <div className="mt-2 flex flex-wrap gap-2">
-          {publicationsConfig.themes.map((theme) => (
-            <div
-              key={theme}
-              className="flex items-start gap-2 rounded-lg border px-3 py-2"
-              style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-elevated)' }}
-            >
-              <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
-              <span className="text-xs leading-relaxed text-[var(--text-200)]">{theme}</span>
-            </div>
-          ))}
-        </div>
+        <ScrollReveal direction="left" distance={20} delay={0.1}>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {publicationsConfig.themes.map((theme) => (
+              <div
+                key={theme}
+                className="flex items-start gap-2 rounded-lg border px-3 py-2"
+                style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-elevated)' }}
+              >
+                <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
+                <span className="text-xs leading-relaxed text-[var(--text-200)]">{theme}</span>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
 
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={shouldReduceMotion ? { duration: 0 } : motionTokens.spring.soft}
-          className="relative mt-6 overflow-hidden rounded-[1.6rem] border p-5 sm:p-6"
+          className="relative mt-6 overflow-hidden rounded-[1.6rem] border p-5 sm:p-6 glass-card"
           style={{
             borderColor: 'var(--border-subtle)',
-            background: 'linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015))',
           }}
         >
           <div

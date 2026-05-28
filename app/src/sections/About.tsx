@@ -12,6 +12,7 @@ import { useThemeContext } from '@/context/ThemeContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LazySpline } from '@/components/ui/spline';
 import { getAboutSceneUrl } from '@/config/spline';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 export function About() {
   const shouldReduceMotion = useReducedMotion();
@@ -74,29 +75,31 @@ export function About() {
       
 
       <div className="container-large relative z-10">
-        <div className="section-header items-start text-left">
-          <span className="section-eyebrow">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-            {aboutConfig.label}
-          </span>
-          <AnimatedText
-            el="h2"
-            text={aboutConfig.heading}
-            type="words"
-            className="section-title max-w-4xl text-balance"
-          />
-
-          {/* Scroll-reveal paragraph — signature effect */}
-          {!shouldReduceMotion && !isMobile ? (
-            <ScrollRevealText
-              text={aboutConfig.description}
-              className="section-copy type-body max-w-3xl"
-              el="p"
+        <ScrollReveal direction="up" distance={20}>
+          <div className="section-header items-start text-left">
+            <span className="section-eyebrow">
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              {aboutConfig.label}
+            </span>
+            <AnimatedText
+              el="h2"
+              text={aboutConfig.heading}
+              type="words"
+              className="section-title max-w-4xl text-balance"
             />
-          ) : (
-            <p className="section-copy type-body max-w-3xl">{aboutConfig.description}</p>
-          )}
-        </div>
+
+            {/* Scroll-reveal paragraph — signature effect */}
+            {!shouldReduceMotion && !isMobile ? (
+              <ScrollRevealText
+                text={aboutConfig.description}
+                className="section-copy type-body max-w-3xl"
+                el="p"
+              />
+            ) : (
+              <p className="section-copy type-body max-w-3xl">{aboutConfig.description}</p>
+            )}
+          </div>
+        </ScrollReveal>
 
         <div className="mt-8 grid items-start gap-6 lg:grid-cols-2 lg:gap-8 xl:mt-10">
           {/* ── Images with parallax + tilt ── */}

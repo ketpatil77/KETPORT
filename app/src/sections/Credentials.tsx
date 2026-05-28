@@ -6,6 +6,7 @@ import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MagneticButton } from '@/components/ui/magnetic-button';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 export function Credentials() {
   const shouldReduceMotion = useReducedMotion();
@@ -55,6 +56,7 @@ export function Credentials() {
       <div className="container-large relative z-10">
         <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:gap-12">
           {/* ── Left: section header + education ── */}
+          <ScrollReveal direction="left" distance={24}>
           <div>
             <div className="section-header items-start text-left">
               <span className="section-eyebrow">
@@ -127,8 +129,10 @@ export function Credentials() {
               </div>
             </div>
           </div>
+          </ScrollReveal>
 
           {/* ── Right: certifications ── */}
+          <ScrollReveal direction="right" distance={24} delay={0.1}>
           <div>
             <h3
               className="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-widest"
@@ -163,7 +167,7 @@ export function Credentials() {
                         ? { duration: 0 }
                         : { duration: motionTokens.duration.base, ease: motionTokens.ease.standard, delay: idx * 0.05 }
                     }
-                    className={`relative${isLastOdd ? ' sm:col-span-2 sm:max-w-[calc(50%-6px)] sm:mx-0' : ''}`}
+                    className={`relative${isLastOdd ? ' sm:col-span-2' : ''}`}
                   >
                     {/* Shine border wrapper when selected */}
                     <div
@@ -269,11 +273,11 @@ export function Credentials() {
                       ? { duration: 0 }
                       : { duration: motionTokens.duration.base, ease: motionTokens.ease.standard }
                   }
-                  drag={shouldReduceMotion ? false : 'x'}
+                  drag={!shouldReduceMotion && isMobile ? 'x' : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.1}
                   onDragEnd={handleDetailDragEnd}
-                  className="surface-card mt-6 rounded-2xl border p-5 cursor-grab active:cursor-grabbing"
+                  className={`surface-card mt-6 rounded-2xl border p-5 ${!shouldReduceMotion && isMobile ? 'cursor-grab active:cursor-grabbing' : ''}`}
                   style={{ borderColor: 'var(--border-accent)', touchAction: 'pan-y' }}
                   aria-live="polite"
                 >
@@ -342,6 +346,7 @@ export function Credentials() {
               )}
             </AnimatePresence>
           </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

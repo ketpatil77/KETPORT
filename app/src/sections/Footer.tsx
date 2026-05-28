@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { footerConfig, socialConfig } from '@/config';
@@ -53,7 +53,6 @@ function ProgressRing({ progress, size = 44 }: { progress: number; size?: number
 
 export function Footer() {
   const shouldReduceMotion = useReducedMotion();
-  const year = useMemo(() => new Date().getFullYear(), []);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const footerRef = useRef<HTMLElement>(null);
@@ -191,8 +190,8 @@ export function Footer() {
           style={{ marginTop: '2rem' }}
         >
           {/* Copyright with shimmer */}
-          <p className={`text-sm ${shouldReduceMotion ? 'text-[var(--text-400)]' : 'text-shimmer'}`}>
-            {footerConfig.copyright || `© ${year} Ketan Patil. All rights reserved.`}
+          <p className={`text-sm ${shouldReduceMotion ? 'text-[var(--text-400)]' : 'copyright-shimmer'}`}>
+            {footerConfig.copyright}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-1 sm:justify-end">
@@ -221,7 +220,6 @@ export function Footer() {
               background: 'var(--bg-elevated)',
               border: '1px solid var(--border-accent)',
               color: 'var(--cyan-full)',
-              position: 'fixed',
             }}
             aria-label="Back to top"
             initial={{ opacity: 0, y: 20 }}

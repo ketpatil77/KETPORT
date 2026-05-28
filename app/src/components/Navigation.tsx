@@ -51,9 +51,8 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
 
   const navRef = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
-  // Dock scale + blur as user scrolls past 400px
+  // Dock scale as user scrolls past 400px
   const dockScale = useTransform(scrollY, [0, 400], [1, 0.94]);
-  const dockBlur = useTransform(scrollY, [0, 400], [8, 18]);
 
   const isLight = theme === 'light';
 
@@ -156,14 +155,13 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
           'fixed inset-x-0 top-0 z-50 transition-all duration-300',
           isScrolled || isMenuOpen ? 'nav-shell' : 'bg-transparent',
         )}
-        style={!prefersReducedMotion ? { scale: dockScale } : undefined}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: prefersReducedMotion ? 0 : motionTokens.duration.base }}
       >
-        <div 
+        <motion.div 
           className="container-large"
-          style={!prefersReducedMotion && isScrolled ? { backdropFilter: `blur(${dockBlur.get()}px)` } : undefined}
+          style={!prefersReducedMotion ? { scale: dockScale } : undefined}
         >
           <div className="flex h-[4rem] items-center justify-between gap-4">
             <a
@@ -299,7 +297,7 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="w-full" style={{ height: '2px', background: 'var(--border-subtle)' }} aria-hidden="true">
           <div

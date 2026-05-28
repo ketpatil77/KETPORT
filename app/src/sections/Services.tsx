@@ -8,6 +8,7 @@ import { TiltCard } from '@/components/ui/tilt-card';
 import { LazySpline } from '@/components/ui/spline';
 import { getServicesSceneUrl } from '@/config/spline';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 function renderServiceIcon(iconName: string, className: string) {
   const props = { className, 'aria-hidden': true as const };
@@ -150,15 +151,9 @@ function ServiceCard({
 
         <p className="type-body text-sm leading-relaxed text-[var(--text-200)]">{service.description}</p>
 
-        {/* Outcomes — expand on hover */}
-        <motion.p
-          className="type-body text-sm leading-relaxed text-[var(--text-300)] overflow-hidden"
-          initial={{ maxHeight: '2.5rem' }}
-          whileHover={shouldReduceMotion ? undefined : { maxHeight: '8rem' }}
-          transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Outcome: {service.outcomes}
-        </motion.p>
+        <p className="type-body text-sm leading-relaxed text-[var(--text-300)]">
+          <strong className="font-semibold text-[var(--text-200)]">Outcome:</strong> {service.outcomes}
+        </p>
 
         <div className="mt-auto pt-4">
           <a
@@ -210,19 +205,21 @@ export function Services() {
       
 
       <div className="container-large relative z-10">
-        <div className="section-header items-start text-left">
-          <span className="section-eyebrow">
-            <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            {servicesConfig.label}
-          </span>
-          <AnimatedText
-            el="h2"
-            text={servicesConfig.heading}
-            type="words"
-            className="section-title max-w-3xl text-balance"
-          />
-          <p className="section-copy type-body max-w-2xl">{servicesConfig.description}</p>
-        </div>
+        <ScrollReveal direction="up" distance={20}>
+          <div className="section-header items-start text-left">
+            <span className="section-eyebrow">
+              <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              {servicesConfig.label}
+            </span>
+            <AnimatedText
+              el="h2"
+              text={servicesConfig.heading}
+              type="words"
+              className="section-title max-w-3xl text-balance"
+            />
+            <p className="section-copy type-body max-w-2xl">{servicesConfig.description}</p>
+          </div>
+        </ScrollReveal>
 
         {/* ── Mobile accordion ── */}
         <div className="mt-8 space-y-3 sm:hidden sm:mt-10">
@@ -285,13 +282,9 @@ export function Services() {
           })}
         </div>
 
-        {/* ── Desktop: 4 cards in one row side by side ── */}
+        {/* ── Desktop: Responsive 1, 2, 4 column grid based on viewport size ── */}
         <div
-          className="mt-8 hidden sm:grid sm:mt-10"
-          style={{
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '1.25rem',
-          }}
+          className="mt-8 hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:mt-10"
         >
           {servicesConfig.services.map((service, index) => (
             <TiltCard

@@ -19,6 +19,7 @@
     "animejs": "^3.2.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.3",
+    "lenis": "^1.3.23",
     "lucide-react": "^0.562.0",
     "motion": "^12.34.3",
     "react": "^19.2.0",
