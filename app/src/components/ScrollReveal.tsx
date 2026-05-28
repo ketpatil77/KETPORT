@@ -12,9 +12,39 @@ import { type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'none';
+type RevealPreset = 'subtle' | 'balanced' | 'cinematic';
+
+const REVEAL_PRESETS: Record<RevealPreset, { distance: number; duration: number; margin: string; initialScale: number; once: boolean; staggerDelay: number }> = {
+  subtle: {
+    distance: 16,
+    duration: 0.36,
+    margin: '0px 0px -6% 0px',
+    initialScale: 1,
+    once: true,
+    staggerDelay: 0.06,
+  },
+  balanced: {
+    distance: 26,
+    duration: 0.46,
+    margin: '0px 0px -8% 0px',
+    initialScale: 0.995,
+    once: true,
+    staggerDelay: 0.09,
+  },
+  cinematic: {
+    distance: 40,
+    duration: 0.62,
+    margin: '0px 0px -12% 0px',
+    initialScale: 0.985,
+    once: false,
+    staggerDelay: 0.12,
+  },
+};
 
 interface ScrollRevealProps {
   children: ReactNode;
+  /** Motion intensity preset. Default: 'balanced' */
+  preset?: RevealPreset;
   /** Initial slide direction. Default: 'up' */
   direction?: Direction;
   /** Initial y/x offset in px. Default: 32 */
@@ -45,17 +75,24 @@ function getInitialXY(direction: Direction, distance: number) {
 
 export function ScrollReveal({
   children,
+  preset = 'balanced',
   direction = 'up',
-  distance = 28,
+  distance,
   delay = 0,
-  duration = 0.5,
-  margin = '0px',
+  duration,
+  margin,
   className,
-  once = true,
-  initialScale = 1,
+  once,
+  initialScale,
 }: ScrollRevealProps) {
   const prefersReducedMotion = useReducedMotion();
-  const { x, y } = getInitialXY(direction, distance);
+  const presetConfig = REVEAL_PRESETS[preset];
+  const resolvedDistance = distance ?? presetConfig.distance;
+  const resolvedDuration = duration ?? presetConfig.duration;
+  const resolvedMargin = margin ?? presetConfig.margin;
+  const resolvedOnce = once ?? presetConfig.once;
+  const resolvedInitialScale = initialScale ?? presetConfig.initialScale;
+  const { x, y } = getInitialXY(direction, resolvedDistance);
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
@@ -64,11 +101,11 @@ export function ScrollReveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, x, y, scale: initialScale }}
+      initial={{ opacity: 0, x, y, scale: resolvedInitialScale }}
       whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={{ once, margin }}
+      viewport={{ once: resolvedOnce, margin: resolvedMargin }}
       transition={{
-        duration,
+        duration: resolvedDuration,
         delay,
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
@@ -84,6 +121,7 @@ export function ScrollReveal({
  */
 interface ScrollRevealGroupProps {
   children: ReactNode;
+  preset?: RevealPreset;
   staggerDelay?: number;
   direction?: Direction;
   distance?: number;
@@ -93,14 +131,19 @@ interface ScrollRevealGroupProps {
 
 export function ScrollRevealGroup({
   children,
-  staggerDelay = 0.1,
+  preset = 'balanced',
+  staggerDelay,
   direction = 'up',
-  distance = 24,
-  margin = '0px',
+  distance,
+  margin,
   className,
 }: ScrollRevealGroupProps) {
   const prefersReducedMotion = useReducedMotion();
-  const { x, y } = getInitialXY(direction, distance);
+  const presetConfig = REVEAL_PRESETS[preset];
+  const resolvedDistance = distance ?? presetConfig.distance;
+  const resolvedMargin = margin ?? presetConfig.margin;
+  const resolvedStaggerDelay = staggerDelay ?? presetConfig.staggerDelay;
+  const { x, y } = getInitialXY(direction, resolvedDistance);
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
@@ -111,7 +154,7 @@ export function ScrollRevealGroup({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: staggerDelay,
+        staggerChildren: resolvedStaggerDelay,
         delayChildren: 0.05,
       },
     },
@@ -133,7 +176,7 @@ export function ScrollRevealGroup({
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin }}
+      viewport={{ once: false, margin: resolvedMargin }}
     >
       {Array.isArray(children)
         ? children.map((child, i) => (

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { CheckCircle2, Code2, ExternalLink, Sparkles } from 'lucide-react';
 import { portfolioConfig, proofConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
@@ -11,7 +11,14 @@ import { ScrollReveal } from '@/components/ScrollReveal';
 export function Portfolio() {
   const shouldReduceMotion = useReducedMotion();
   const [activeIdx, setActiveIdx] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
   const projects = portfolioConfig.projects;
+  const { scrollYProgress } = useScroll({
+    target: sectionRef as React.RefObject<HTMLElement>,
+    offset: ['start end', 'end start'],
+  });
+  const glowY = useTransform(scrollYProgress, [0, 1], [-12, 14]);
+  const showcaseY = useTransform(scrollYProgress, [0, 1], [0, -20]);
 
   if (!portfolioConfig.heading || projects.length === 0) return null;
 
@@ -22,11 +29,14 @@ export function Portfolio() {
     : 'View Live Deployment';
 
   return (
-    <section id="portfolio" className="section-shell relative overflow-hidden">
+    <section ref={sectionRef} id="portfolio" className="section-shell relative overflow-hidden">
       {/* Background radial glow */}
-      <div
+      <motion.div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.07] sm:h-[560px] sm:w-[560px] lg:h-[700px] lg:w-[700px]"
-        style={{ background: 'radial-gradient(circle, var(--cyan-full), transparent 65%)' }}
+        style={{
+          background: 'radial-gradient(circle, var(--cyan-full), transparent 65%)',
+          ...(shouldReduceMotion ? {} : { y: glowY }),
+        }}
         aria-hidden="true"
       />
 
@@ -94,6 +104,7 @@ export function Portfolio() {
             exit={{ opacity: 0, y: -16 }}
             transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: motionTokens.ease.standard }}
             className="mt-8 grid gap-6 lg:grid-cols-12"
+            style={shouldReduceMotion ? undefined : { y: showcaseY }}
           >
             {/* Left: Browser Mockup Visual Stage */}
             <div className="lg:col-span-5 flex flex-col justify-start">

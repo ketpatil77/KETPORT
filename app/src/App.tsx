@@ -19,6 +19,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ThemeContext } from '@/context/ThemeContext';
 import { DeviceCapabilitiesProvider } from '@/context/DeviceCapabilitiesContext';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 /** Thin scroll-progress bar at top of page */
 function ScrollProgressBar() {
@@ -53,13 +54,13 @@ function App() {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      // 0.7 = fast enough to feel instant, smooth enough to not jar
-      duration: 0.7,
+      // Lower duration + higher multiplier = faster scroll response
+      duration: 0.5,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 1.1,
     });
 
     lenisRef.current = lenis;
@@ -89,6 +90,8 @@ function App() {
     metaDescription.setAttribute('content', siteConfig.description);
   }, []);
 
+  const sectionDistance = isMobile ? 18 : 34;
+
   return (
     <DeviceCapabilitiesProvider>
       <ThemeContext.Provider value={theme}>
@@ -111,19 +114,33 @@ function App() {
           <main id="main-content" className="relative z-10">
             <Hero />
             <div className="section-divider" />
-            <Portfolio />
+            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <Portfolio />
+            </ScrollReveal>
             <div className="section-divider" />
-            <Services />
+            <ScrollReveal preset="cinematic" direction="right" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <Services />
+            </ScrollReveal>
             <div className="section-divider" />
-            <Experience />
+            <ScrollReveal preset="cinematic" direction="left" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <Experience />
+            </ScrollReveal>
             <div className="section-divider" />
-            <Publications />
+            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <Publications />
+            </ScrollReveal>
             <div className="section-divider" />
-            <TechStack />
+            <ScrollReveal preset="cinematic" direction="right" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <TechStack />
+            </ScrollReveal>
             <div className="section-divider" />
-            <About />
+            <ScrollReveal preset="cinematic" direction="left" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <About />
+            </ScrollReveal>
             <div className="section-divider" />
-            <Credentials />
+            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+              <Credentials />
+            </ScrollReveal>
           </main>
 
           <Footer />

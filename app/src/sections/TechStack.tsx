@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useMemo, useRef, useState } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Boxes, Sparkles, Terminal } from 'lucide-react';
 import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
@@ -82,7 +82,14 @@ export function TechStack() {
   const isMobile = useIsMobile();
   const theme = useThemeContext();
   const isLight = theme === 'light';
+  const sectionRef = useRef<HTMLElement>(null);
   const [activeTab, setActiveTab] = useState(techStackConfig.groups[0]?.id);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef as React.RefObject<HTMLElement>,
+    offset: ['start end', 'end start'],
+  });
+  const blobY = useTransform(scrollYProgress, [0, 1], [10, -16]);
+  const explorerY = useTransform(scrollYProgress, [0, 1], [0, -12]);
 
   const activeGroup = useMemo(
     () => techStackConfig.groups.find((group) => group.id === activeTab) ?? techStackConfig.groups[0],
@@ -94,10 +101,13 @@ export function TechStack() {
   const explorerItems = activeGroup.items.slice(0, 5);
 
   return (
-    <section id="tech-stack" className="section-shell relative overflow-hidden">
-      <div
+    <section ref={sectionRef} id="tech-stack" className="section-shell relative overflow-hidden">
+      <motion.div
         className="ambient-blob pointer-events-none absolute top-1/3 right-1/4 h-[500px] w-[500px] rounded-full opacity-[0.04] mix-blend-screen"
-        style={{ background: 'radial-gradient(circle, var(--cyan-full), transparent 60%)' }}
+        style={{
+          background: 'radial-gradient(circle, var(--cyan-full), transparent 60%)',
+          ...(shouldReduceMotion ? {} : { y: blobY }),
+        }}
         aria-hidden="true"
       />
 
@@ -150,6 +160,7 @@ export function TechStack() {
           style={{
             background:
               'radial-gradient(circle at top, rgba(255,112,67,0.12), transparent 42%), linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
+            ...(shouldReduceMotion ? {} : { y: explorerY }),
           }}
         >
           <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">

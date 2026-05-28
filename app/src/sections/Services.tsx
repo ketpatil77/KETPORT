@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Brain, ChevronDown, Circle, CloudCog, Code2, ShieldCheck, Sparkles } from 'lucide-react';
 import { brandConfig, servicesConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
@@ -173,19 +173,36 @@ export function Services() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef as React.RefObject<HTMLElement>,
+    offset: ['start end', 'end start'],
+  });
+  const leftBlobY = useTransform(scrollYProgress, [0, 1], [12, -20]);
+  const rightBlobY = useTransform(scrollYProgress, [0, 1], [-8, 18]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, -14]);
 
   if (!servicesConfig.heading && servicesConfig.services.length === 0) return null;
 
   return (
-    <section id="services" className="section-shell relative overflow-hidden">
-      <div
+    <section ref={sectionRef} id="services" className="section-shell relative overflow-hidden">
+      <motion.div
         className="ambient-blob pointer-events-none absolute top-1/2 -left-40 h-[620px] w-[480px] -translate-y-1/2 rounded-full opacity-[0.05]"
-        style={{ background: 'radial-gradient(circle, #ff7043, transparent 65%)', filter: 'blur(110px)' }}
+        style={{
+          background: 'radial-gradient(circle, #ff7043, transparent 65%)',
+          filter: 'blur(110px)',
+          ...(shouldReduceMotion ? {} : { y: leftBlobY }),
+        }}
         aria-hidden="true"
       />
-      <div
+      <motion.div
         className="ambient-blob pointer-events-none absolute bottom-0 right-0 h-[460px] w-[460px] rounded-full opacity-[0.05]"
-        style={{ background: 'radial-gradient(circle, #c9a961, transparent 65%)', filter: 'blur(95px)', animationDelay: '5s' }}
+        style={{
+          background: 'radial-gradient(circle, #c9a961, transparent 65%)',
+          filter: 'blur(95px)',
+          animationDelay: '5s',
+          ...(shouldReduceMotion ? {} : { y: rightBlobY }),
+        }}
         aria-hidden="true"
       />
       
@@ -283,8 +300,9 @@ export function Services() {
         </div>
 
         {/* ── Desktop: Responsive 1, 2, 4 column grid based on viewport size ── */}
-        <div
+        <motion.div
           className="mt-8 hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:mt-10"
+          style={shouldReduceMotion ? undefined : { y: gridY }}
         >
           {servicesConfig.services.map((service, index) => (
             <TiltCard
@@ -301,7 +319,7 @@ export function Services() {
               />
             </TiltCard>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
