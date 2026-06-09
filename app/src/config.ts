@@ -30,7 +30,7 @@ export const brandConfig: BrandConfig = {
   interviewCtaHref: 'mailto:ket.patil77@gmail.com?subject=Interview%20Intro%20Call',
   resumeLabel: 'Download Resume',
   // Place your PDF at app/public/resume/KET-RESUME-NEW.pdf
-  resumeHref: '/resume/KET-RESUME-NEW.pdf?v=20260605',
+  resumeHref: 'https://github.com/ketpatil77/KETPORT/raw/main/app/public/resume/KET-RESUME-NEW.pdf',
   resumeFileName: 'KET-RESUME-NEW.pdf',
 };
 
@@ -778,3 +778,4 @@ export const footerConfig: FooterConfig = {
   copyright: `© ${new Date().getFullYear()} Ketan Patil. All rights reserved.`,
   credit: 'Engineered with React, TypeScript, Tailwind CSS, and Framer Motion.',
 };
+
