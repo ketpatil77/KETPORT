@@ -1,64 +1,79 @@
 # KETPORT
 
-Professional portfolio website for Ketan Patil, built to present full-stack engineering, AI systems work, secure platform delivery, and production-grade user experience design.
+Professional portfolio platform for Ketan Patil. Built to present engineering work, research, services, and product thinking through fast, modern frontend delivery.
 
-## Overview
+## Live Surface
 
-KETPORT is a React and Vite-based portfolio application designed as a polished recruiter-facing and collaborator-facing presentation layer for projects, services, technical depth, and engineering identity. The project emphasizes clear content structure, refined motion systems, modern frontend architecture, and deployable production hosting.
+- Portfolio: [ketpatil77.github.io](https://ketpatil77.github.io)
+- GitHub Profile: [github.com/ketpatil77](https://github.com/ketpatil77)
+- Resume: [KET-RESUME-NEW.pdf](https://ketpatil77.github.io/resume/KET-RESUME-NEW.pdf?v=20260529)
 
-## Why This Project Exists
+## What This Project Does
 
-A portfolio should do more than list technologies. KETPORT was built to communicate technical credibility, product taste, and implementation discipline through a real application rather than a static profile page. It serves as a central professional surface for showcasing project case studies, engineering capabilities, and contact pathways.
+- Presents flagship work, research, experience, and technical depth in one polished site.
+- Ships smooth motion, premium UI treatment, and responsive layouts across desktop and mobile.
+- Includes contact paths, downloadable resume, publication section, and curated project storytelling.
+- Acts as public proof layer for profile, hiring, networking, and client conversations.
 
-## Key Features
+## Stack
 
-- Modern portfolio experience built with React, TypeScript, and Vite
-- Recruiter-friendly project and experience presentation
-- Motion-enhanced interface using Framer Motion
-- Structured content configuration for easier iteration and maintenance
-- Deployment-ready setup for production hosting on Vercel
-- Clear separation of application code, assets, and configuration
-
-## Technology
-
-- React 19
+- React
 - TypeScript
 - Vite
 - Tailwind CSS
-- Framer Motion
-- Vercel
+- Motion-focused UI components
 
-## Project Structure
+## Workspace Layout
 
-- `app/src/` application source code
-- `app/public/` static assets, images, and resume files
-- `app/src/config.ts` portfolio content and section configuration
-- `vercel.json` deployment configuration for production hosting
+This repository uses root workspace scripts and an app subproject:
+
+```text
+port/
+  app/        # actual Vite frontend
+  README.md   # repo overview
+  package.json
+```
 
 ## Local Development
 
-This repository uses Node.js 20.
+Requirements:
+
+- Node.js `20.x`
+- npm
+
+Install:
 
 ```bash
 npm run install:app
+```
+
+Start development server:
+
+```bash
 npm run dev
+```
+
+Build production bundle:
+
+```bash
 npm run build
+```
+
+Preview production build:
+
+```bash
 npm run preview
 ```
 
-## Deployment
+## Quality Bar
 
-The project is configured for deployment on Vercel. The root workspace delegates application build and development commands to the `app/` package, and `vercel.json` provides the SPA rewrite configuration required for production hosting.
+- Responsive on mobile and desktop
+- Resume link must resolve to current PDF
+- Project copy must stay evidence-first, not buzzword-first
+- No stale placeholder content
 
-## Engineering Notes
+## Notes
 
-- The root workspace keeps application commands centralized for simpler local and hosted workflows.
-- Content-driven configuration makes portfolio updates easier without deep structural changes.
-- The setup is intended to balance presentation quality with maintainability and deployment simplicity.
-
-## Recommended Next Improvements
-
-- Add screenshots or a live demo URL
-- Add Lighthouse or performance notes if measured
-- Add a section describing major UI/UX decisions
-- Add testing and linting workflow details if available
+- Main frontend source lives under `app/`
+- Root scripts proxy into `app/`
+- Public resume asset lives under `app/public/resume/`
