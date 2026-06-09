@@ -1,66 +1,67 @@
 /**
  * ScrollReveal — reusable scroll-triggered entrance wrapper.
- * Wraps children in a motion.div that fades + slides into view when
+ * Wraps children in a motion.div that fades + slides + blurs into view when
  * the element enters the viewport. Respects `prefers-reduced-motion`.
- *
- * Usage:
- *   <ScrollReveal direction="up" delay={0.1}>
- *     <MyComponent />
- *   </ScrollReveal>
  */
 import { type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, type Transition } from 'framer-motion';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'none';
 type RevealPreset = 'subtle' | 'balanced' | 'cinematic';
 
-const REVEAL_PRESETS: Record<RevealPreset, { distance: number; duration: number; margin: string; initialScale: number; once: boolean; staggerDelay: number }> = {
+const REVEAL_PRESETS: Record<RevealPreset, {
+  distance: number;
+  duration: number;
+  margin: string;
+  initialScale: number;
+  once: boolean;
+  staggerDelay: number;
+  blur: number;
+}> = {
   subtle: {
     distance: 16,
-    duration: 0.36,
+    duration: 0.4,
     margin: '0px 0px -6% 0px',
     initialScale: 1,
     once: true,
     staggerDelay: 0.06,
+    blur: 0,
   },
   balanced: {
-    distance: 26,
-    duration: 0.46,
+    distance: 24,
+    duration: 0.5,
     margin: '0px 0px -8% 0px',
-    initialScale: 0.995,
+    initialScale: 0.99,
     once: true,
     staggerDelay: 0.09,
+    blur: 4,
   },
   cinematic: {
     distance: 40,
-    duration: 0.62,
+    duration: 0.65,
     margin: '0px 0px -12% 0px',
-    initialScale: 0.985,
+    initialScale: 0.97,
     once: false,
     staggerDelay: 0.12,
+    blur: 8,
   },
 };
 
 interface ScrollRevealProps {
   children: ReactNode;
-  /** Motion intensity preset. Default: 'balanced' */
   preset?: RevealPreset;
-  /** Initial slide direction. Default: 'up' */
   direction?: Direction;
-  /** Initial y/x offset in px. Default: 32 */
   distance?: number;
-  /** Delay before animation starts in seconds. Default: 0 */
   delay?: number;
-  /** Animation duration in seconds. Default: 0.55 */
   duration?: number;
-  /** Viewport margin to trigger earlier. Default: '-60px' */
   margin?: string;
-  /** Extra class names on the wrapper */
   className?: string;
-  /** Whether to replay when scrolling back up. Default: true (once only) */
   once?: boolean;
-  /** Scale factor at start. Default: 1 (no scale) */
   initialScale?: number;
+  /** Blur px at start of reveal. Default: preset value */
+  blur?: number;
+  /** Use spring physics instead of ease curve */
+  spring?: boolean;
 }
 
 function getInitialXY(direction: Direction, distance: number) {
@@ -84,6 +85,8 @@ export function ScrollReveal({
   className,
   once,
   initialScale,
+  blur,
+  spring = false,
 }: ScrollRevealProps) {
   const prefersReducedMotion = useReducedMotion();
   const presetConfig = REVEAL_PRESETS[preset];
@@ -92,23 +95,32 @@ export function ScrollReveal({
   const resolvedMargin = margin ?? presetConfig.margin;
   const resolvedOnce = once ?? presetConfig.once;
   const resolvedInitialScale = initialScale ?? presetConfig.initialScale;
+  const resolvedBlur = blur ?? presetConfig.blur;
   const { x, y } = getInitialXY(direction, resolvedDistance);
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
+  const transition: Transition = spring
+    ? { type: 'spring', bounce: 0.22, duration: resolvedDuration + 0.2, delay }
+    : { duration: resolvedDuration, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, x, y, scale: resolvedInitialScale }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={{ once: resolvedOnce, margin: resolvedMargin }}
-      transition={{
-        duration: resolvedDuration,
-        delay,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      initial={{
+        opacity: 0, x, y,
+        scale: resolvedInitialScale,
+        filter: resolvedBlur > 0 ? `blur(${resolvedBlur}px)` : undefined,
       }}
+      whileInView={{
+        opacity: 1, x: 0, y: 0,
+        scale: 1,
+        filter: resolvedBlur > 0 ? 'blur(0px)' : undefined,
+      }}
+      viewport={{ once: resolvedOnce, margin: resolvedMargin }}
+      transition={transition}
     >
       {children}
     </motion.div>
