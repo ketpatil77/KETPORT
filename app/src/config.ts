@@ -8,9 +8,9 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   language: 'en',
-  title: 'Ketan Patil | Full-Stack Product Engineer for AI & Secure Systems',
+  title: 'Ketan Patil | AI/ML Engineer, Full-Stack Developer, Cybersecurity Analyst',
   description:
-    'Portfolio of Ketan Patil: production-grade product engineering across AI systems, secure full-stack platforms, and measurable delivery outcomes.',
+    'Portfolio of Ketan Patil: AI/ML engineer, full-stack developer, cybersecurity analyst, three-time published researcher, and internship-backed systems builder.',
 };
 
 export interface BrandConfig {
@@ -29,9 +29,9 @@ export const brandConfig: BrandConfig = {
   interviewCtaLabel: 'Book Interview Intro',
   interviewCtaHref: 'mailto:ket.patil77@gmail.com?subject=Interview%20Intro%20Call',
   resumeLabel: 'Download Resume',
-  // Place your PDF at app/public/resume/ketan-patil-resume.pdf
-  resumeHref: '/resume/ketan-patil-resume.pdf',
-  resumeFileName: 'Ketan-Patil-Resume.pdf',
+  // Place your PDF at app/public/resume/KET-RESUME-NEW.pdf
+  resumeHref: '/resume/KET-RESUME-NEW.pdf?v=20260605',
+  resumeFileName: 'KET-RESUME-NEW.pdf',
 };
 
 export interface SocialConfig {
@@ -41,8 +41,8 @@ export interface SocialConfig {
 }
 
 export const socialConfig: SocialConfig[] = [
-  { iconName: 'Github', href: 'https://github.com/ketanpatil', label: 'GitHub' },
-  { iconName: 'Linkedin', href: 'https://linkedin.com/in/ketanpatil', label: 'LinkedIn' },
+  { iconName: 'Github', href: 'https://github.com/ketpatil77', label: 'GitHub' },
+  { iconName: 'Linkedin', href: 'https://www.linkedin.com/in/ketan-patil77', label: 'LinkedIn' },
   { iconName: 'Mail', href: 'mailto:ket.patil77@gmail.com', label: 'Email' },
   { iconName: 'Phone', href: 'tel:+917796895767', label: '+91-7796895767' },
 ];
@@ -90,21 +90,21 @@ export interface HeroConfig {
 
 export const heroConfig: HeroConfig = {
   name: 'Ketan Patil',
-  title: 'Full-Stack Product Engineer | AI Systems & Secure Platforms',
+  title: 'AI/ML Engineer | Full-Stack Developer | Cybersecurity Analyst',
   intro:
-    'I build production systems that combine product clarity, secure architecture, and measurable operational impact.',
+    'B.Tech Computer Technology student at DBATU, graduating in 2027, with internships at Meta, Sophos, and the Government of India. I build production-grade AI/ML systems, full-stack web applications, and security tooling with measurable delivery outcomes.',
   roles: [
-    'React/TypeScript Product Interfaces',
-    'AI Workflow & Agent Orchestration',
-    'Secure API & Identity Architecture',
-    'Cloud Delivery & Observability',
+    '3 Peer-Reviewed Publications',
+    'Production AI/ML & Full-Stack Systems',
+    'Authorized Security Assessment Work',
+    'Networking, Data, and Automation Workflows',
   ],
   location: 'India (remote-first, global collaboration)',
-  availability: 'Open for internships and full-time roles',
+  availability: 'Open for internships, full-time roles, and research-aligned engineering work',
   backgroundImage: '/images/hero-bg.jpg',
   metrics: [
-    { value: '10+', label: 'Projects Launched' },
-    { value: '3+', label: 'Years Experience' },
+    { value: '3', label: 'Peer-Reviewed Papers' },
+    { value: '14+', label: 'Verified Certifications' },
     { value: '15K+', label: 'Daily Requests Supported' },
   ],
 };
@@ -128,20 +128,20 @@ export interface AboutConfig {
 
 export const aboutConfig: AboutConfig = {
   label: 'About',
-  heading: 'Engineering with product judgment, reliability, and execution discipline.',
+  heading: 'Engineering across AI/ML delivery, full-stack systems, and security-first execution.',
   description:
-    'I work across frontend architecture, backend systems, AI-assisted workflows, and security hardening, with focus on clear interfaces and production performance.',
+    'I work across AI/ML pipelines, full-stack product development, networking, and cybersecurity operations, with a bias toward production readiness, quantified outcomes, and research-backed system design.',
   experienceValue: '3+',
-  experienceLabel: 'Years building\nreal-world systems',
+  experienceLabel: 'Years across\nproduct, AI, and security systems',
   images: [
     { src: '/images/about-1.jpg', alt: 'Desk setup with product sketches and code' },
     { src: '/images/about-2.jpg', alt: 'Collaboration session focused on delivery planning' },
   ],
   strengths: [
-    'Production React/TypeScript delivery',
-    'Applied AI workflow automation',
-    'Secure API design and hardening',
-    'Performance, reliability, and observability engineering',
+    'Three-time published researcher in applied AI/ML systems',
+    'Production AI/ML, React, Flask, Django, and PHP delivery',
+    'Authorized penetration testing, IDS/IPS tuning, and infrastructure hardening',
+    'CCNP / CCNA backed networking and measurable execution discipline',
   ],
   languages: ['English', 'Hindi', 'Marathi'],
 };
@@ -363,19 +363,33 @@ export const credentialsConfig: CredentialsConfig = {
     {
       institution: 'Dr. Babasaheb Ambedkar Technological University (DBATU)',
       degree: 'B.Tech – Computer Technology',
-      duration: 'Sept 2024 – Present',
+      duration: 'Sept 2024 – Present (Expected 2027)',
       location: 'Lonere, Maharashtra'
     },
     {
-      institution: 'MSBTE',
-      degree: 'Diploma in Computer Engineering',
+      institution: 'Maharashtra State Board of Technical Education (MSBTE)',
+      degree: 'Diploma – Computer Technology',
       duration: 'Jun 2021 – Jun 2024',
+      location: 'Maharashtra, India'
+    },
+    {
+      institution: 'Maharashtra State Board',
+      degree: '12th – PCM',
+      duration: 'Completed 2021',
       location: 'Maharashtra, India'
     }
   ],
   certifications: [
     {
-      name: 'CCNA',
+      name: 'CCNP - Routing & Switching',
+      issuer: 'Cisco',
+      year: '2026',
+      summary:
+        'Advanced networking certification focused on enterprise routing, switching, and production network operations.',
+      focusAreas: ['Enterprise Routing', 'Switching', 'Operational Networking'],
+    },
+    {
+      name: 'CCNA - Routing & Switching',
       issuer: 'Cisco',
       year: '2024',
       summary:
@@ -383,20 +397,36 @@ export const credentialsConfig: CredentialsConfig = {
       focusAreas: ['Routing & Switching', 'Network Security Basics', 'Troubleshooting Workflows'],
     },
     {
-      name: 'AI for Cybersecurity',
-      issuer: 'Johns Hopkins University',
-      year: '2025',
-      summary:
-        'Applied program focused on integrating AI techniques into threat detection, analysis, and response pipelines.',
-      focusAreas: ['AI Threat Detection', 'Security Analytics', 'Incident Prioritization'],
-    },
-    {
-      name: 'Cybersecurity Analyst',
+      name: 'IBM Cybersecurity Analyst Professional',
       issuer: 'IBM',
       year: '2025',
       summary:
         'Role-focused cybersecurity training for SOC operations, incident handling, and vulnerability management.',
-      focusAreas: ['SOC Operations', 'Incident Response', 'Vulnerability Analysis'],
+      focusAreas: ['SOC Operations', 'Incident Response', 'Threat Management'],
+    },
+    {
+      name: 'Penetration Testing, Threat Hunting & Cryptography',
+      issuer: 'IBM',
+      year: '2026',
+      summary:
+        'Advanced IBM track centered on offensive assessment, cryptographic concepts, and threat-hunting practices.',
+      focusAreas: ['Penetration Testing', 'Threat Hunting', 'Cryptography'],
+    },
+    {
+      name: 'Python for Data Science, AI & Development',
+      issuer: 'IBM',
+      year: '2026',
+      summary:
+        'Applied Python program spanning data science workflows, AI experimentation, and development fundamentals.',
+      focusAreas: ['Python', 'Data Science', 'AI Development'],
+    },
+    {
+      name: 'Introduction to Cloud Computing',
+      issuer: 'IBM',
+      year: '2026',
+      summary:
+        'Cloud fundamentals program covering service models, deployment patterns, and platform capabilities.',
+      focusAreas: ['Cloud Basics', 'Service Models', 'Deployment Patterns'],
     },
     {
       name: 'Database Engineer',
@@ -415,7 +445,7 @@ export const credentialsConfig: CredentialsConfig = {
       focusAreas: ['Data Interpretation', 'Metrics Reporting', 'Decision Support'],
     },
     {
-      name: 'AWS Machine Learning',
+      name: 'Getting Started with Machine Learning',
       issuer: 'Amazon',
       year: '2025',
       summary:
@@ -423,12 +453,36 @@ export const credentialsConfig: CredentialsConfig = {
       focusAreas: ['ML Workflows on AWS', 'Model Deployment', 'Cloud-Scale Inference'],
     },
     {
-      name: 'IT Support Professional',
+      name: 'Google IT Support Professional Certificate',
       issuer: 'Google',
       year: '2025',
       summary:
-        'IT support certification covering operating systems, diagnostics, and user-focused troubleshooting.',
-      focusAreas: ['Systems Support', 'Diagnostics', 'User Operations'],
+        'IT support certification covering operating systems, diagnostics, networking, and user-focused troubleshooting.',
+      focusAreas: ['Systems Support', 'Diagnostics', 'Networking & OS'],
+    },
+    {
+      name: 'Successful Negotiation',
+      issuer: 'University of Michigan',
+      year: '2026',
+      summary:
+        'Professional communication and negotiation training with emphasis on collaborative decision-making.',
+      focusAreas: ['Negotiation', 'Communication', 'Decision Making'],
+    },
+    {
+      name: 'Leadership Skills',
+      issuer: 'IIM Ahmedabad',
+      year: '2024',
+      summary:
+        'Leadership-oriented program on team coordination, initiative, and professional growth.',
+      focusAreas: ['Leadership', 'Teamwork', 'Professional Growth'],
+    },
+    {
+      name: 'Wireshark for Basic Network Security Analysis',
+      issuer: 'Coursera',
+      year: '2026',
+      summary:
+        'Hands-on packet analysis and network-security inspection using Wireshark.',
+      focusAreas: ['Wireshark', 'Packet Analysis', 'Network Security'],
     }
   ]
 };
@@ -451,9 +505,10 @@ export const proofConfig: ProofConfig = {
   description:
     'A curated set of projects showing what was built, why it mattered, and what improved.',
   highlights: [
+    { label: 'Peer-Reviewed Papers', value: '3' },
+    { label: 'Verified Certifications', value: '14+' },
     { label: 'Daily Traffic Supported', value: '15K+' },
-    { label: 'Latency Improvement', value: '12%' },
-    { label: 'Endpoints Secured', value: '200+' },
+    { label: 'Attack Surface Reduction', value: '~40%' },
   ],
 };
 
