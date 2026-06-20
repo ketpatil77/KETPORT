@@ -6,7 +6,7 @@ Professional portfolio platform for Ketan Patil. Built to present engineering wo
 
 - Portfolio: [ketpatil77.github.io](https://ketpatil77.github.io)
 - GitHub Profile: [github.com/ketpatil77](https://github.com/ketpatil77)
-- Resume: [KET-RESUME-NEW.pdf](https://ketpatil77.github.io/resume/KET-RESUME-NEW.pdf?v=20260529)
+- Resume: [KET-RESUME-NEW.pdf](https://ketpatil77.github.io/resume/KET-RESUME-NEW.pdf?v=20260620)
 
 ## What This Project Does
 
