@@ -15,6 +15,10 @@ Professional portfolio platform for Ketan Patil. Built to present engineering wo
 - Includes contact paths, downloadable resume, publication section, and curated project storytelling.
 - Acts as public proof layer for profile, hiring, networking, and client conversations.
 
+## Documentation
+
+- [Architecture overview](docs/architecture.md)
+
 ## Stack
 
 - React
