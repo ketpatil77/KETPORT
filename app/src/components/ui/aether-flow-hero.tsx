@@ -72,13 +72,13 @@ function cn(...classes: Array<string | undefined>) {
 
 export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlowHeroProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { shouldLoad3D } = useDeviceCapabilities();
+  const { shouldLoad3D, sceneQuality } = useDeviceCapabilities();
   // keep a mutable ref so the running animation loop reads the latest theme
   const themeRef = useRef<Theme>(theme);
   themeRef.current = theme;
 
   useEffect(() => {
-    if (!shouldLoad3D) return;
+    if (!shouldLoad3D || sceneQuality !== 'high') return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -86,9 +86,11 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
     if (!ctx) return;
 
     let frameId = 0;
+    let lastFrameTime = 0;
     let particles: Particle[] = [];
     const mouse: MouseState = { x: null, y: null, radius: 200 };
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
+    const targetFrameDuration = 1000 / 36;
 
     const getBounds = (): Bounds => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -100,9 +102,9 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
     const getColors = () => {
       if (themeRef.current === 'light') {
         return {
-          particle: 'rgba(37, 99, 235, 0.55)',      // cobalt
-          lineBase: (opacity: number) => `rgba(37, 99, 235, ${opacity * 0.6})`,
-          lineHover: (opacity: number) => `rgba(29, 78, 216, ${opacity * 0.85})`,
+          particle: 'rgba(37, 99, 235, 0.22)',
+          lineBase: (opacity: number) => `rgba(37, 99, 235, ${opacity * 0.18})`,
+          lineHover: (opacity: number) => `rgba(29, 78, 216, ${opacity * 0.28})`,
           bg: 'rgba(0,0,0,0)',                        // transparent — body colour shows
         };
       }
@@ -118,7 +120,10 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
       const { width, height } = getBounds();
       const colors = getColors();
       particles = [];
-      const count = Math.max(60, Math.floor((width * height) / 9000));
+      const isLightTheme = themeRef.current === 'light';
+      const count = isLightTheme
+        ? Math.min(38, Math.max(18, Math.floor((width * height) / 52000)))
+        : Math.min(90, Math.max(42, Math.floor((width * height) / 22000)));
 
       for (let i = 0; i < count; i += 1) {
         const size = Math.random() * 2 + 1;
@@ -166,7 +171,7 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
             ctx.strokeStyle = colors.lineBase(opacity);
           }
 
-          ctx.lineWidth = 1;
+          ctx.lineWidth = themeRef.current === 'light' ? 0.65 : 1;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(particles[b].x, particles[b].y);
@@ -175,8 +180,10 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
       }
     };
 
-    const animate = () => {
+    const animate = (time: number) => {
       frameId = window.requestAnimationFrame(animate);
+      if (time - lastFrameTime < targetFrameDuration) return;
+      lastFrameTime = time;
       const { width, height } = getBounds();
       const colors = getColors();
 
@@ -208,7 +215,7 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseout', handleLeave);
     resize();
-    animate();
+    animate(0);
 
     return () => {
       window.removeEventListener('resize', resize);
@@ -216,9 +223,9 @@ export default function AetherFlowHero({ className, theme = 'dark' }: AetherFlow
       window.removeEventListener('mouseout', handleLeave);
       window.cancelAnimationFrame(frameId);
     };
-  }, [shouldLoad3D]);
+  }, [sceneQuality, shouldLoad3D]);
 
-  if (!shouldLoad3D) {
+  if (!shouldLoad3D || sceneQuality !== 'high') {
     return null;
   }
 

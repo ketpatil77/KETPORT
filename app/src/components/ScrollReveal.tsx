@@ -28,22 +28,22 @@ const REVEAL_PRESETS: Record<RevealPreset, {
     blur: 0,
   },
   balanced: {
-    distance: 24,
-    duration: 0.5,
+    distance: 18,
+    duration: 0.42,
     margin: '0px 0px -8% 0px',
-    initialScale: 0.99,
+    initialScale: 0.995,
     once: true,
     staggerDelay: 0.09,
-    blur: 4,
+    blur: 0,
   },
   cinematic: {
-    distance: 40,
-    duration: 0.65,
+    distance: 24,
+    duration: 0.46,
     margin: '0px 0px -12% 0px',
-    initialScale: 0.97,
-    once: false,
+    initialScale: 0.99,
+    once: true,
     staggerDelay: 0.12,
-    blur: 8,
+    blur: 2,
   },
 };
 
@@ -188,7 +188,7 @@ export function ScrollRevealGroup({
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: resolvedMargin }}
+      viewport={{ once: true, margin: resolvedMargin }}
     >
       {Array.isArray(children)
         ? children.map((child, i) => (

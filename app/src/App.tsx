@@ -1,83 +1,56 @@
-import { useEffect, useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
-import Lenis from 'lenis';
+import { lazy, Suspense, useEffect, useMemo } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Navigation } from '@/components/Navigation';
 import { Hero } from '@/sections/Hero';
-import { About } from '@/sections/About';
-import { Services } from '@/sections/Services';
-import { TechStack } from '@/sections/TechStack';
-import { Portfolio } from '@/sections/Portfolio';
-import { Experience } from '@/sections/Experience';
-import { Publications } from '@/sections/Publications';
-import { Credentials } from '@/sections/Credentials';
 import { Footer } from '@/sections/Footer';
 import { siteConfig } from '@/config';
 import { PageReveal } from '@/components/PageReveal';
 import AetherFlowHero from '@/components/ui/aether-flow-hero';
 import { useTheme } from '@/hooks/useTheme';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 import { ThemeContext } from '@/context/ThemeContext';
 import { DeviceCapabilitiesProvider } from '@/context/DeviceCapabilitiesContext';
-import { ScrollReveal } from '@/components/ScrollReveal';
 
-/** Thin scroll-progress bar at top of page */
-function ScrollProgressBar() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 30,
-    restDelta: 0.001,
-  });
+const About = lazy(() => import('@/sections/About').then((module) => ({ default: module.About })));
+const Services = lazy(() => import('@/sections/Services').then((module) => ({ default: module.Services })));
+const TechStack = lazy(() => import('@/sections/TechStack').then((module) => ({ default: module.TechStack })));
+const Portfolio = lazy(() => import('@/sections/Portfolio').then((module) => ({ default: module.Portfolio })));
+const InnovationLab = lazy(() => import('@/sections/InnovationLab').then((module) => ({ default: module.InnovationLab })));
+const Experience = lazy(() => import('@/sections/Experience').then((module) => ({ default: module.Experience })));
+const Publications = lazy(() => import('@/sections/Publications').then((module) => ({ default: module.Publications })));
+const Credentials = lazy(() => import('@/sections/Credentials').then((module) => ({ default: module.Credentials })));
 
+function App() {
   return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 z-[200] origin-left"
-      style={{
-        scaleX,
-        height: '2px',
-        background: 'linear-gradient(90deg, var(--cyan-full), var(--violet))',
-        transformOrigin: '0%',
-      }}
-      aria-hidden="true"
-    />
+    <DeviceCapabilitiesProvider>
+      <AppShell />
+    </DeviceCapabilitiesProvider>
   );
 }
 
-function App() {
+function AppShell() {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const { theme, toggle } = useTheme();
-  const lenisRef = useRef<Lenis | null>(null);
+  const { sceneQuality, shouldLoad3D, hardwareConcurrency, deviceMemory } = useDeviceCapabilities();
+  const allowImmersiveFx =
+    shouldLoad3D &&
+    !prefersReducedMotion &&
+    !isMobile &&
+    sceneQuality === 'high' &&
+    hardwareConcurrency >= 12 &&
+    deviceMemory >= 8;
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const lenis = new Lenis({
-      // Lower duration + higher multiplier = faster scroll response
-      duration: 0.5,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.1,
-    });
-
-    lenisRef.current = lenis;
-
-    let frameId: number;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frameId = requestAnimationFrame(raf);
-    };
-    frameId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(frameId);
-      lenis.destroy();
-      lenisRef.current = null;
-    };
-  }, [prefersReducedMotion]);
+  const sectionFallback = useMemo(
+    () => (
+      <div className="container-large py-16" aria-hidden="true">
+        <div className="h-28 animate-pulse rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)]/65" />
+      </div>
+    ),
+    [],
+  );
 
   useEffect(() => {
     document.title = siteConfig.title;
@@ -88,65 +61,118 @@ function App() {
       document.head.appendChild(metaDescription);
     }
     metaDescription.setAttribute('content', siteConfig.description);
+
+    const canonicalHref = 'https://ketpatil77.github.io/';
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', canonicalHref);
+
+    const setMetaProperty = (property: string, content: string) => {
+      let tag = document.querySelector(`meta[property="${property}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('property', property);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    setMetaProperty('og:url', canonicalHref);
+
+    const personLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Ketan Patil',
+      url: canonicalHref,
+      jobTitle: 'Full-Stack Engineer',
+      sameAs: [
+        'https://github.com/ketpatil77',
+        'https://www.linkedin.com/in/ketan-patil77',
+      ],
+      knowsAbout: ['React', 'TypeScript', 'AI/ML', 'Cybersecurity', 'Cloud'],
+    };
+
+    let ldJsonScript = document.querySelector('script[data-ketan-schema="person"]') as HTMLScriptElement | null;
+    if (!ldJsonScript) {
+      ldJsonScript = document.createElement('script');
+      ldJsonScript.type = 'application/ld+json';
+      ldJsonScript.dataset.ketanSchema = 'person';
+      document.head.appendChild(ldJsonScript);
+    }
+    ldJsonScript.textContent = JSON.stringify(personLd);
   }, []);
 
-  const sectionDistance = isMobile ? 18 : 34;
-
   return (
-    <DeviceCapabilitiesProvider>
-      <ThemeContext.Provider value={theme}>
-        <motion.div
-          className="relative min-h-screen"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.42 }}
-        >
-          <PageReveal />
-          {!prefersReducedMotion && <ScrollProgressBar />}
-          <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:rounded-lg focus:bg-[var(--cyan-full)] focus:px-4 focus:py-2 focus:text-[#020202] focus:font-bold focus:shadow-lg">
-            Skip to content
-          </a>
-          {!prefersReducedMotion && <CustomCursor />}
-          {!isMobile && <AetherFlowHero theme={theme} />}
+    <ThemeContext.Provider value={theme}>
+      <motion.div
+        className="relative min-h-screen"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.42 }}
+      >
+        <PageReveal />
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:rounded-lg focus:bg-[var(--cyan-full)] focus:px-4 focus:py-2 focus:text-[#020202] focus:font-bold focus:shadow-lg">
+          Skip to content
+        </a>
+        {allowImmersiveFx && <CustomCursor />}
+        {allowImmersiveFx && <AetherFlowHero theme={theme} />}
 
-          <Navigation onThemeToggle={toggle} theme={theme} />
+        <Navigation onThemeToggle={toggle} theme={theme} />
 
-          <main id="main-content" className="relative z-10">
-            <Hero />
+        <main id="main-content" className="relative z-10">
+          <Hero />
+          <div className="section-divider" />
+          <Suspense fallback={sectionFallback}>
+            <Portfolio />
+          </Suspense>
+
+          <div className="hidden md:block">
             <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <Portfolio />
-            </ScrollReveal>
+            <Suspense fallback={sectionFallback}>
+              <InnovationLab />
+            </Suspense>
             <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="right" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
+            <Suspense fallback={sectionFallback}>
               <Services />
-            </ScrollReveal>
-            <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="left" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <Experience />
-            </ScrollReveal>
-            <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <Publications />
-            </ScrollReveal>
-            <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="right" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <TechStack />
-            </ScrollReveal>
-            <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="left" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <About />
-            </ScrollReveal>
-            <div className="section-divider" />
-            <ScrollReveal preset="cinematic" direction="up" distance={sectionDistance} once={false} margin="0px 0px -10% 0px">
-              <Credentials />
-            </ScrollReveal>
-          </main>
+            </Suspense>
+          </div>
 
-          <Footer />
-        </motion.div>
-      </ThemeContext.Provider>
-    </DeviceCapabilitiesProvider>
+          <div className="section-divider" />
+          <Suspense fallback={sectionFallback}>
+            <Experience />
+          </Suspense>
+
+          <div className="hidden md:block">
+            <div className="section-divider" />
+            <Suspense fallback={sectionFallback}>
+              <Publications />
+            </Suspense>
+            <div className="section-divider" />
+            <Suspense fallback={sectionFallback}>
+              <TechStack />
+            </Suspense>
+          </div>
+
+          <div className="section-divider" />
+          <Suspense fallback={sectionFallback}>
+            <About />
+          </Suspense>
+
+          <div className="hidden md:block">
+            <div className="section-divider" />
+            <Suspense fallback={sectionFallback}>
+              <Credentials />
+            </Suspense>
+          </div>
+        </main>
+
+        <Footer />
+      </motion.div>
+    </ThemeContext.Provider>
   );
 }
 

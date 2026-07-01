@@ -14,12 +14,10 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { navigationConfig } from '@/config';
-import { AnimatedButton } from '@/components/AnimatedButton';
 import { motionTokens } from '@/lib/motion';
 import type { Theme } from '@/hooks/useTheme';
 
 const HEADER_OFFSET = 82;
-
 const mobileOverlayLinks: Array<{ label: string; href: string; icon: LucideIcon }> = [
   { label: 'Overview', href: '#hero', icon: LayoutPanelTop },
   { label: 'Case Studies', href: '#portfolio', icon: BriefcaseBusiness },
@@ -51,7 +49,6 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
 
   const navRef = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
-  // Dock scale as user scrolls past 400px
   const dockScale = useTransform(scrollY, [0, 400], [1, 0.94]);
 
   const isLight = theme === 'light';
@@ -167,7 +164,7 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
             <a
               href="#hero"
               onClick={(event) => handleNavClick(event, '#hero')}
-              className="focus-ring type-heading inline-flex min-h-11 items-center rounded-md px-2 text-base font-semibold tracking-tight sm:px-1"
+              className="focus-ring type-accent inline-flex min-h-11 items-center rounded-md px-2 text-base font-semibold tracking-tight sm:px-1"
               style={{ color: 'var(--text-100)' }}
               aria-label="Go to top"
             >
@@ -185,7 +182,7 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
                     onClick={(event) => handleNavClick(event, link.href)}
                     aria-current={isActive ? 'page' : undefined}
                     className={cn(
-                      'focus-ring type-body relative rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200',
+                      'focus-ring type-accent relative rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200',
                     )}
                     style={{
                       color: isActive ? 'var(--text-100)' : 'var(--text-300)',
@@ -264,19 +261,6 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
                 </AnimatePresence>
               </motion.button>
 
-              <div className="hidden lg:block">
-                <AnimatedButton
-                  href={navigationConfig.contactHref}
-                  download={navigationConfig.contactDownloadName}
-                  variant="primary"
-                  size="sm"
-                  className="px-[1.1rem] py-2 text-sm"
-                  showIcon
-                >
-                  {navigationConfig.contactLabel}
-                </AnimatedButton>
-              </div>
-
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -311,6 +295,7 @@ export function Navigation({ onThemeToggle, theme }: NavigationProps) {
             }}
           />
         </div>
+
       </motion.nav>
 
       <AnimatePresence>

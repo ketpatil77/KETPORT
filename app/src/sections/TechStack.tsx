@@ -10,6 +10,7 @@ import { useThemeContext } from '@/context/ThemeContext';
 import { DragScroll } from '@/components/ui/drag-scroll';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 const brandColorMapDark: Record<string, string> = {
   NVIDIA: '#84cc16',
@@ -80,6 +81,7 @@ function LogoChip({
 export function TechStack() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const { sceneQuality } = useDeviceCapabilities();
   const theme = useThemeContext();
   const isLight = theme === 'light';
   const sectionRef = useRef<HTMLElement>(null);
@@ -105,7 +107,7 @@ export function TechStack() {
       <motion.div
         className="ambient-blob pointer-events-none absolute top-1/3 right-1/4 h-[500px] w-[500px] rounded-full opacity-[0.04] mix-blend-screen"
         style={{
-          background: 'radial-gradient(circle, var(--cyan-full), transparent 60%)',
+          background: 'radial-gradient(circle, var(--accent-full), transparent 60%)',
           ...(shouldReduceMotion ? {} : { y: blobY }),
         }}
         aria-hidden="true"
@@ -138,7 +140,7 @@ export function TechStack() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: motionTokens.ease.standard }}
-          className="mt-8 flex flex-wrap justify-center gap-3"
+          className="mt-5 flex flex-wrap justify-center gap-2"
         >
           {techStackConfig.logos.map((logo, idx) => (
             <LogoChip
@@ -156,16 +158,16 @@ export function TechStack() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={shouldReduceMotion ? { duration: 0 } : motionTokens.spring.soft}
-          className="mt-8 overflow-hidden rounded-[1.75rem] border border-[var(--border-dim)]"
+          className="mt-5 overflow-hidden rounded-[1.45rem] border border-[var(--border-dim)]"
           style={{
             background:
               'radial-gradient(circle at top, rgba(255,112,67,0.12), transparent 42%), linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
             ...(shouldReduceMotion ? {} : { y: explorerY }),
           }}
         >
-          <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
+          <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-2.5">
             <div>
-              <p className="type-heading text-xs uppercase tracking-[0.2em] text-[var(--cyan-full)]">
+              <p className="type-heading text-xs uppercase tracking-[0.2em] text-[var(--accent-full)]">
                 Technology Explorer
               </p>
               <p className="mt-1 text-[0.72rem] text-[var(--text-400)]">
@@ -173,13 +175,13 @@ export function TechStack() {
               </p>
             </div>
             <div className="hidden items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-1 text-[0.68rem] font-medium text-[var(--text-300)] sm:inline-flex">
-              <Boxes className="h-3.5 w-3.5 text-[var(--cyan-dim)]" aria-hidden="true" />
+              <Boxes className="h-3.5 w-3.5 text-[var(--accent-dim)]" aria-hidden="true" />
               {activeGroup.label}
             </div>
           </div>
 
           <div
-            className="relative min-h-[22rem] overflow-hidden sm:min-h-[24rem] lg:min-h-[26rem]"
+          className="relative min-h-[14rem] overflow-hidden sm:min-h-[15.5rem] lg:min-h-[16.5rem]"
             style={{
               backgroundImage:
                 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
@@ -200,7 +202,7 @@ export function TechStack() {
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.28, ease: motionTokens.ease.standard }}
-              className="mx-auto w-full max-w-[18rem] rounded-[1.6rem] border border-[var(--border-dim)] px-4 py-4 text-center shadow-[0_24px_60px_-34px_rgba(0,0,0,0.8)]"
+              className="mx-auto w-full max-w-[16.5rem] rounded-[1.35rem] border border-[var(--border-dim)] px-3.5 py-3.5 text-center shadow-[0_24px_60px_-34px_rgba(0,0,0,0.8)]"
               style={{
                 background: 'var(--tech-explorer-bg)',
                 backdropFilter: 'blur(10px)',
@@ -212,12 +214,12 @@ export function TechStack() {
               <p className="mt-2 type-heading text-base font-semibold text-[var(--text-100)]">
                 {activeGroup.label}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-[var(--text-300)]">
+              <p className="type-body mt-2 text-xs leading-relaxed text-[var(--text-300)]">
                 {explorerItems.length} core technologies with production-facing impact.
               </p>
             </motion.div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 mt-6 sm:mt-8 px-4 pb-4">
+            <div className="mt-4 grid gap-2.5 px-4 pb-4 sm:mt-5 sm:grid-cols-2 lg:grid-cols-5">
               {explorerItems.map((item, index) => {
                 const accent = brandColor(item.name, index, isLight);
                 return (
@@ -228,7 +230,7 @@ export function TechStack() {
                     viewport={{ once: true, margin: '-24px' }}
                     transition={shouldReduceMotion ? { duration: 0 } : { delay: index * 0.04, duration: 0.26, ease: motionTokens.ease.standard }}
                     whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.01 }}
-                    className="min-w-0 rounded-2xl border px-3 py-3 text-left shadow-[0_18px_40px_-26px_rgba(0,0,0,0.55)] glass-card"
+                    className="min-w-0 rounded-2xl border px-3 py-2.5 text-left shadow-[0_18px_40px_-26px_rgba(0,0,0,0.55)] glass-card"
                     style={{
                       borderColor: 'var(--border-dim)',
                     }}
@@ -239,7 +241,7 @@ export function TechStack() {
                     <p className="mt-2 type-heading text-sm font-semibold leading-tight text-[var(--text-100)]">
                       {item.name}
                     </p>
-                    <p className="mt-2 text-[0.68rem] leading-relaxed text-[var(--text-300)] line-clamp-3">
+                    <p className="type-body mt-2 text-[0.68rem] leading-relaxed text-[var(--text-300)] line-clamp-3">
                       {item.impact}
                     </p>
                   </motion.div>
@@ -254,10 +256,10 @@ export function TechStack() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={shouldReduceMotion ? { duration: 0 } : motionTokens.spring.soft}
-          className="mt-8"
+          className="mt-5"
         >
           <Tabs defaultValue={techStackConfig.groups[0].id} onValueChange={setActiveTab} className="w-full">
-            <div className="relative mb-6">
+            <div className="relative mb-5">
               {isMobile ? (
                 <DragScroll showFade snap={false} className="w-full">
                   <div className="flex gap-2 px-1 py-1.5">
@@ -284,7 +286,7 @@ export function TechStack() {
                 >
                   {techStackConfig.groups.map((group) => (
                     <TabsTrigger
-                      className="type-heading min-h-[40px] rounded-lg border border-transparent px-4 py-2 text-sm font-semibold tracking-wide text-[var(--text-300)] transition-all data-[state=active]:border-[var(--border-dim)] data-[state=active]:bg-[var(--bg-elevated)] data-[state=active]:text-[var(--text-100)] data-[state=active]:shadow-md hover:text-[var(--text-100)]"
+                        className="type-heading magnetic-hover min-h-[40px] rounded-lg border border-transparent px-4 py-2 text-sm font-semibold tracking-wide text-[var(--text-300)] transition-all data-[state=active]:border-[var(--border-dim)] data-[state=active]:bg-[var(--bg-elevated)] data-[state=active]:text-[var(--text-100)] data-[state=active]:shadow-md hover:text-[var(--text-100)]"
                       value={group.id}
                       key={group.id}
                     >
@@ -302,7 +304,7 @@ export function TechStack() {
                     initial={{ opacity: 0, scale: 0.99 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.24, ease: motionTokens.ease.standard }}
-                    className={`grid items-stretch gap-3 grid-cols-1 sm:grid-cols-2 ${
+                    className={`grid items-stretch gap-2.5 grid-cols-1 sm:grid-cols-2 ${
                       group.items.length >= 5 ? 'xl:grid-cols-5' : 'xl:grid-cols-4'
                     }`}
                   >
@@ -311,11 +313,11 @@ export function TechStack() {
                         key={item.name}
                         maxTilt={5}
                         scale={1.02}
-                        disabled={Boolean(shouldReduceMotion) || isMobile}
+                        disabled={Boolean(shouldReduceMotion) || isMobile || sceneQuality !== 'high'}
                         className="h-full"
                       >
                         <div
-                          className="group relative flex h-full min-h-[11.25rem] flex-col gap-3 rounded-2xl border p-4 transition-all duration-300 hover:border-[var(--border-bright)] glass-card"
+                        className="group magnetic-hover relative flex h-full min-h-[9.75rem] flex-col gap-2.5 rounded-2xl border p-3.5 transition-all duration-300 hover:border-[var(--border-bright)] glass-card"
                           tabIndex={0}
                           aria-label={`${item.name}. ${item.description}. Impact: ${item.impact}`}
                           style={{
@@ -324,14 +326,14 @@ export function TechStack() {
                         >
                           <div
                             className="absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
-                            style={{ background: 'radial-gradient(ellipse at center, var(--cyan-trace), transparent 90%)' }}
+                            style={{ background: 'radial-gradient(ellipse at center, var(--accent-trace), transparent 90%)' }}
                           />
 
                           <div className="relative z-10 flex items-center justify-between gap-2">
                             <h3 className="type-heading text-sm font-bold tracking-tight text-[var(--text-100)] sm:text-base">
                               {item.name}
                             </h3>
-                            <Terminal className="h-3.5 w-3.5 shrink-0 text-[var(--text-400)] transition-colors duration-300 group-hover:text-[var(--cyan-full)]" />
+                            <Terminal className="h-3.5 w-3.5 shrink-0 text-[var(--text-400)] transition-colors duration-300 group-hover:text-[var(--accent-full)]" />
                           </div>
 
                           <p className="relative z-10 type-body text-sm leading-relaxed text-[var(--text-300)]">
@@ -339,7 +341,7 @@ export function TechStack() {
                           </p>
 
                           <div className="relative z-10 mt-auto border-t border-[var(--border-subtle)] pt-3">
-                            <p className="type-body text-sm italic leading-relaxed text-[var(--cyan-dim)] transition-colors duration-300 group-hover:text-[var(--cyan-full)]">
+                            <p className="type-body text-sm italic leading-relaxed text-[var(--accent-dim)] transition-colors duration-300 group-hover:text-[var(--accent-full)]">
                               {item.impact}
                             </p>
                           </div>

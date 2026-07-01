@@ -8,6 +8,7 @@ type ParticleTextEffectProps = {
   className?: string;
   height?: number;
   pixelStep?: number;
+  targetFps?: number;
   drawAsPoints?: boolean;
   fontFamily?: string;
   fontWeight?: number;
@@ -159,6 +160,7 @@ export function ParticleTextEffect({
   className,
   height = 176,
   pixelStep = 4,
+  targetFps = 36,
   drawAsPoints = true,
   fontFamily = "'Sentient', 'Times New Roman', serif",
   fontWeight = 700,
@@ -183,10 +185,12 @@ export function ParticleTextEffect({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     const particles = particlesRef.current;
     let width = 0;
     let canvasHeight = height;
+    let lastFrameTime = 0;
+    const frameDuration = 1000 / Math.max(12, targetFps);
 
     const pickColor = () => colors[Math.floor(Math.random() * colors.length)] ?? { r: 255, g: 255, b: 255 };
 
@@ -277,7 +281,12 @@ export function ParticleTextEffect({
       }
     };
 
-    const render = () => {
+    const render = (time: number) => {
+      if (time - lastFrameTime < frameDuration) {
+        animationRef.current = requestAnimationFrame(render);
+        return;
+      }
+      lastFrameTime = time;
       ctx.clearRect(0, 0, width, canvasHeight);
 
       for (let i = particles.length - 1; i >= 0; i -= 1) {
@@ -339,7 +348,7 @@ export function ParticleTextEffect({
     resizeObserver.observe(wrapper);
     setCanvasSize();
     mapTextToParticles(text.toUpperCase());
-    render();
+    render(0);
 
     canvas.addEventListener('pointerdown', onPointerDown);
     canvas.addEventListener('pointerup', onPointerUp);
@@ -356,7 +365,7 @@ export function ParticleTextEffect({
       canvas.removeEventListener('pointerleave', onPointerLeave);
       canvas.removeEventListener('contextmenu', onContextMenu);
     };
-  }, [colors, drawAsPoints, fontFamily, fontWeight, height, pixelStep, text]);
+  }, [colors, drawAsPoints, fontFamily, fontWeight, height, pixelStep, targetFps, text]);
 
   return (
     <div ref={wrapperRef} className={cn('relative w-full', className)}>

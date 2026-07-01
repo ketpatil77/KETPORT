@@ -103,17 +103,17 @@ export function Footer() {
       <p className="mb-4 text-sm font-bold uppercase tracking-wider text-[var(--text-400)]">Brand</p>
       <a
         href="#hero"
-        className="focus-ring type-heading inline-flex min-h-11 items-center rounded-md text-lg font-semibold"
+        className="focus-ring type-accent inline-flex min-h-11 items-center rounded-md text-lg font-semibold"
         style={{ color: 'var(--text-100)' }}
         onClick={(event) => handleNavClick(event, '#hero')}
       >
         <span className="text-gradient">{footerConfig.logo.split(' ')[0]}</span>
         <span style={{ color: 'var(--text-200)' }}> {footerConfig.logo.split(' ').slice(1).join(' ')}</span>
       </a>
-      <p className="mt-3 text-sm leading-relaxed text-[var(--text-300)]">
+      <p className="type-body mt-3 text-sm leading-relaxed text-[var(--text-300)]">
         Portfolio systems, research-backed delivery, and security-aware product execution.
       </p>
-      <p className="mt-3 text-sm text-[var(--text-400)]">{footerConfig.credit}</p>
+      <p className="type-body mt-3 text-sm text-[var(--text-400)]">{footerConfig.credit}</p>
       <div className="mt-4 flex items-center gap-2">
         <SocialIcons items={socialItems} />
       </div>
@@ -128,14 +128,13 @@ export function Footer() {
             key={link.label}
             href={link.href}
             onClick={(event) => handleNavClick(event, link.href)}
-            className="footer-link focus-ring text-sm leading-relaxed text-[var(--text-300)] transition-colors hover:text-[var(--text-100)]"
+            className="type-body footer-link focus-ring text-sm leading-relaxed text-[var(--text-300)] transition-colors hover:text-[var(--text-100)]"
           >
             {link.label}
           </a>
         ))}
       </div>
     </div>,
-
     /* More */
     <div key="more">
       <p className="mb-4 text-sm font-bold uppercase tracking-wider text-[var(--text-400)]">More</p>
@@ -145,14 +144,13 @@ export function Footer() {
             key={link.label}
             href={link.href}
             onClick={(event) => handleNavClick(event, link.href)}
-            className="footer-link focus-ring text-sm leading-relaxed text-[var(--text-300)] transition-colors hover:text-[var(--text-100)]"
+            className="type-body footer-link focus-ring text-sm leading-relaxed text-[var(--text-300)] transition-colors hover:text-[var(--text-100)]"
           >
             {link.label}
           </a>
         ))}
       </div>
     </div>,
-
   ];
 
   return (
@@ -190,7 +188,7 @@ export function Footer() {
           style={{ marginTop: '2rem' }}
         >
           {/* Copyright with shimmer */}
-          <p className={`text-sm ${shouldReduceMotion ? 'text-[var(--text-400)]' : 'copyright-shimmer'}`}>
+          <p className={`type-body text-sm ${shouldReduceMotion ? 'text-[var(--text-400)]' : 'copyright-shimmer'}`}>
             {footerConfig.copyright}
           </p>
 
@@ -200,7 +198,7 @@ export function Footer() {
                 key={`bottom-${link.label}`}
                 href={link.href}
                 onClick={(event) => handleNavClick(event, link.href)}
-                className="focus-ring utility-link footer-link"
+                className="focus-ring type-body utility-link footer-link"
               >
                 {link.label}
               </a>
@@ -215,7 +213,7 @@ export function Footer() {
           <motion.button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })}
-            className="focus-ring fixed bottom-6 right-6 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full shadow-xl"
+            className="focus-ring fixed bottom-5 right-5 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full shadow-xl"
             style={{
               background: 'var(--bg-elevated)',
               border: '1px solid var(--border-accent)',
@@ -228,8 +226,8 @@ export function Footer() {
             transition={shouldReduceMotion ? { duration: 0 } : { duration: motionTokens.duration.fast, type: 'spring', bounce: 0.35 }}
             whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
           >
-            {!shouldReduceMotion && <ProgressRing progress={scrollProgress} size={44} />}
-            <ArrowUp className="relative z-10 h-4 w-4 shrink-0" />
+            {!shouldReduceMotion && <ProgressRing progress={scrollProgress} size={40} />}
+            <ArrowUp className="relative z-10 h-3.5 w-3.5 shrink-0" />
           </motion.button>
         )}
       </AnimatePresence>

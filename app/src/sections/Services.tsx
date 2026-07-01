@@ -5,10 +5,9 @@ import { brandConfig, servicesConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
 import { TiltCard } from '@/components/ui/tilt-card';
-import { LazySpline } from '@/components/ui/spline';
-import { getServicesSceneUrl } from '@/config/spline';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { useSectionScrollFX } from '@/hooks/useSectionScrollFX';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 function renderServiceIcon(iconName: string, className: string) {
   const props = { className, 'aria-hidden': true as const };
@@ -60,7 +59,7 @@ function ServiceVisual({ index, iconName }: { index: number; iconName: string })
   const tint = SERVICE_TINTS[index % SERVICE_TINTS.length];
 
   return (
-    <div className="service-visual-card relative h-32 overflow-hidden" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+    <div className="service-visual-card relative h-28 overflow-hidden" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
       <img
         src={img}
         alt=""
@@ -77,7 +76,7 @@ function ServiceVisual({ index, iconName }: { index: number; iconName: string })
       <div className="absolute inset-0" style={{ background: tint, mixBlendMode: 'screen' }} aria-hidden="true" />
 
       <div
-        className="absolute left-5 top-5 z-10 flex items-center gap-2 text-xs uppercase tracking-[0.14em]"
+        className="absolute left-4 top-4 z-10 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.14em]"
         style={{ color: 'var(--cyan-dim)' }}
       >
         {renderServiceIcon(iconName, `h-4 w-4 shrink-0 ${serviceIconAnimClass(iconName)}`)}
@@ -85,7 +84,7 @@ function ServiceVisual({ index, iconName }: { index: number; iconName: string })
       </div>
 
       <span
-        className="absolute right-4 top-4 z-10 rounded-full px-2 py-1 font-mono text-[0.62rem]"
+        className="absolute right-3.5 top-3.5 z-10 rounded-full px-2 py-1 font-mono text-[0.6rem]"
         style={{
           border: '1px solid var(--border-accent)',
           background: 'rgba(6,6,10,0.72)',
@@ -134,7 +133,7 @@ function ServiceCard({
     >
       <ServiceVisual index={index} iconName={service.iconName} />
 
-      <div className="relative z-10 flex flex-1 flex-col gap-3 p-5 sm:p-6">
+      <div className="relative z-10 flex flex-1 flex-col gap-2.5 p-4 sm:p-5">
         <div className="flex items-center gap-3">
           <span
             className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${serviceIconAnimClass(service.iconName)}`}
@@ -146,19 +145,19 @@ function ServiceCard({
           >
             {renderServiceIcon(service.iconName, 'h-4 w-4 shrink-0')}
           </span>
-          <h3 className="type-heading text-sm font-semibold text-[var(--text-100)]">{service.title}</h3>
+          <h3 className="type-heading text-[0.95rem] font-semibold text-[var(--text-100)]">{service.title}</h3>
         </div>
 
-        <p className="type-body text-sm leading-relaxed text-[var(--text-200)]">{service.description}</p>
+        <p className="type-body text-[0.94rem] leading-relaxed text-[var(--text-200)]">{service.description}</p>
 
-        <p className="type-body text-sm leading-relaxed text-[var(--text-300)]">
+        <p className="type-body text-[0.94rem] leading-relaxed text-[var(--text-300)]">
           <strong className="font-semibold text-[var(--text-200)]">Outcome:</strong> {service.outcomes}
         </p>
 
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-2.5">
           <a
             href={brandConfig.recruiterCtaHref}
-            className="btn-outline focus-ring inline-flex min-h-[46px] w-full items-center justify-between gap-2 text-sm"
+            className="btn-outline focus-ring inline-flex min-h-[42px] w-full items-center justify-between gap-2 text-sm"
           >
             Discuss Implementation
             <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -171,9 +170,10 @@ function ServiceCard({
 
 export function Services() {
   const shouldReduceMotion = useReducedMotion();
-  const isMobile = useIsMobile();
+  const { sceneQuality } = useDeviceCapabilities();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const { headerStyle, bodyStyle, accentStyle } = useSectionScrollFX(sectionRef);
   const { scrollYProgress } = useScroll({
     target: sectionRef as React.RefObject<HTMLElement>,
     offset: ['start end', 'end start'],
@@ -192,6 +192,7 @@ export function Services() {
           background: 'radial-gradient(circle, #ff7043, transparent 65%)',
           filter: 'blur(110px)',
           ...(shouldReduceMotion ? {} : { y: leftBlobY }),
+          ...accentStyle,
         }}
         aria-hidden="true"
       />
@@ -205,25 +206,9 @@ export function Services() {
         }}
         aria-hidden="true"
       />
-      
-      {/* 3D Services Background */}
-      {!shouldReduceMotion && !isMobile && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-          <LazySpline
-            scene={getServicesSceneUrl()}
-            fallback={<div className="h-full w-full" />}
-            className="h-full w-full opacity-10"
-            containerClassName="h-full w-full"
-            rootMargin="220px"
-          />
-        </div>
-      )}
-      
-      
-
       <div className="container-large relative z-10">
         <ScrollReveal direction="up" distance={20}>
-          <div className="section-header items-start text-left">
+          <motion.div className="section-header items-start text-left" style={headerStyle}>
             <span className="section-eyebrow">
               <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               {servicesConfig.label}
@@ -235,7 +220,7 @@ export function Services() {
               className="section-title max-w-3xl text-balance"
             />
             <p className="section-copy type-body max-w-2xl">{servicesConfig.description}</p>
-          </div>
+          </motion.div>
         </ScrollReveal>
 
         {/* ── Mobile accordion ── */}
@@ -283,8 +268,8 @@ export function Services() {
                     <ChevronDown className={`service-accordion-chevron${isOpen ? ' open' : ''}`} aria-hidden="true" />
                   </button>
                   <div id={`service-body-${index}`} className={`service-accordion-body${isOpen ? ' open' : ''}`}>
-                    <p className="mb-3 text-sm leading-relaxed text-[var(--text-200)]">{service.description}</p>
-                    <p className="mb-4 text-sm leading-relaxed text-[var(--text-300)]">Outcome: {service.outcomes}</p>
+                    <p className="type-body mb-3 text-sm leading-relaxed text-[var(--text-200)]">{service.description}</p>
+                    <p className="type-body mb-4 text-sm leading-relaxed text-[var(--text-300)]">Outcome: {service.outcomes}</p>
                     <a
                       href={brandConfig.recruiterCtaHref}
                       className="btn-outline focus-ring inline-flex w-full min-h-[44px] items-center justify-between gap-2 text-sm"
@@ -301,15 +286,15 @@ export function Services() {
 
         {/* ── Desktop: Responsive 1, 2, 4 column grid based on viewport size ── */}
         <motion.div
-          className="mt-8 hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:mt-10"
-          style={shouldReduceMotion ? undefined : { y: gridY }}
+          className="mt-6 hidden items-stretch gap-4 sm:mt-8 sm:grid sm:grid-cols-2 lg:grid-cols-4"
+          style={shouldReduceMotion ? undefined : { y: gridY, ...(bodyStyle ?? {}) }}
         >
           {servicesConfig.services.map((service, index) => (
             <TiltCard
               key={service.title}
               maxTilt={4}
               scale={1.015}
-              disabled={Boolean(shouldReduceMotion)}
+              disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
               className="h-full"
             >
               <ServiceCard

@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Briefcase, CheckCircle2, MapPin, Sparkles } from 'lucide-react';
 import { experienceConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { useSectionScrollFX } from '@/hooks/useSectionScrollFX';
+import { SectionScrollProgress } from '@/components/SectionScrollProgress';
 
 function parseDuration(duration: string): { years: number; months: number } {
   const now = new Date();
@@ -84,28 +86,37 @@ function ExperienceCard({
 
   return (
     <motion.article
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 24, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: '-40px' }}
+      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 32, scale: 0.96, filter: 'blur(8px)' }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-30px' }}
       transition={
         shouldReduceMotion
           ? { duration: 0 }
-          : { delay: index * 0.06, duration: 0.34, ease: motionTokens.ease.standard }
+          : { delay: index * 0.09, duration: 0.55, ease: motionTokens.ease.standard }
       }
-      whileHover={shouldReduceMotion ? undefined : { y: -4 }}
-      className="group relative flex h-full min-h-[19.5rem] flex-col overflow-hidden rounded-[1.4rem] border p-5 shadow-[0_18px_44px_-34px_rgba(0,0,0,0.85)] sm:p-6 glass-card"
-      style={{
-        borderColor: 'var(--border-subtle)',
-      }}
+      whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.01 }}
+      className="group relative flex h-full min-h-[15.25rem] flex-col overflow-hidden rounded-[1.2rem] border p-3.5 shadow-[0_18px_44px_-34px_rgba(0,0,0,0.85)] sm:p-4 glass-card"
+      style={{ borderColor: 'var(--border-subtle)' }}
     >
       <div
         className="absolute inset-x-0 top-0 h-px"
         style={{ background: 'linear-gradient(90deg, transparent, var(--border-accent) 50%, transparent)' }}
         aria-hidden="true"
       />
+      {/* Hover glow */}
       <div
         className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: 'radial-gradient(circle at top, rgba(255,112,67,0.10), transparent 50%)' }}
+        style={{ background: 'radial-gradient(circle at top, rgba(255,112,67,0.12), transparent 55%)' }}
+        aria-hidden="true"
+      />
+      {/* Entry shimmer line */}
+      <motion.div
+        className="absolute inset-x-0 top-0 h-[2px] origin-left"
+        style={{ background: 'linear-gradient(90deg, var(--cyan-full), var(--border-accent))' }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: '-30px' }}
+        transition={{ delay: index * 0.09 + 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         aria-hidden="true"
       />
 
@@ -136,21 +147,28 @@ function ExperienceCard({
         </div>
       </div>
 
-      <div className="relative z-10 mt-5">
-        <h3 className="type-heading break-words text-[1.12rem] font-bold tracking-tight text-[var(--text-100)] sm:text-xl">
+      <div className="relative z-10 mt-3.5">
+        <h3 className="type-heading break-words text-[1.02rem] font-bold tracking-tight text-[var(--text-100)] sm:text-[1.12rem]">
           {item.company}
         </h3>
-        <p className="mt-2 text-sm font-semibold leading-relaxed text-[var(--text-200)]">
+        <p className="mt-1.5 text-[13px] font-semibold leading-relaxed text-[var(--text-200)]">
           {item.role}
         </p>
       </div>
 
-      <ul className="relative z-10 mt-5 space-y-3">
-        {item.highlights.map((highlight) => (
-          <li key={highlight} className="flex min-w-0 items-start gap-3 text-sm leading-relaxed text-[var(--text-300)]">
+      <ul className="relative z-10 mt-3.5 space-y-2">
+        {item.highlights.map((highlight, hIdx) => (
+          <motion.li
+            key={highlight}
+            className="type-body flex min-w-0 items-start gap-2.5 text-[13px] leading-relaxed text-[var(--text-300)]"
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -12 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-20px' }}
+            transition={{ delay: index * 0.09 + hIdx * 0.07 + 0.25, duration: 0.35, ease: motionTokens.ease.standard }}
+          >
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan-dim)]" aria-hidden="true" />
             <span className="min-w-0 break-words">{highlight}</span>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </motion.article>
@@ -159,20 +177,23 @@ function ExperienceCard({
 
 export function Experience() {
   const shouldReduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { headerStyle, bodyStyle, accentStyle, scrollYProgress } = useSectionScrollFX(sectionRef);
 
   if (!experienceConfig.items || experienceConfig.items.length === 0) return null;
 
   return (
-    <section id="experience" className="section-shell relative overflow-hidden">
-      <div
-        className="pointer-events-none absolute left-0 top-1/4 h-[380px] w-[380px] -translate-x-1/2 rounded-full opacity-[0.03]"
-        style={{ background: 'radial-gradient(circle, var(--cyan-full), transparent 70%)' }}
+    <section ref={sectionRef} id="experience" className="section-shell relative overflow-hidden">
+      {!shouldReduceMotion && <SectionScrollProgress scrollYProgress={scrollYProgress} />}
+      <motion.div
+        className="pointer-events-none absolute left-0 top-1/4 h-[480px] w-[480px] -translate-x-1/2 rounded-full opacity-[0.04]"
+        style={{ background: 'radial-gradient(circle, var(--cyan-full), transparent 70%)', ...accentStyle }}
         aria-hidden="true"
       />
 
       <div className="container-large relative z-10">
         <ScrollReveal direction="up" distance={20}>
-          <div className="section-header">
+          <motion.div className="section-header" style={headerStyle}>
             <span className="section-eyebrow">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
               {experienceConfig.label}
@@ -184,10 +205,10 @@ export function Experience() {
               className="section-title max-w-3xl text-balance"
             />
             <p className="section-copy type-body max-w-2xl">{experienceConfig.description}</p>
-          </div>
+          </motion.div>
         </ScrollReveal>
 
-        <div className="mt-8 grid gap-4 sm:mt-10 md:grid-cols-2 xl:grid-cols-3">
+        <motion.div className="mt-5 grid items-stretch gap-3 sm:mt-6 md:grid-cols-2 xl:grid-cols-3" style={bodyStyle}>
           {experienceConfig.items.map((item, index) => (
             <ExperienceCard
               key={`${item.company}-${index}`}
@@ -196,7 +217,7 @@ export function Experience() {
               shouldReduceMotion={shouldReduceMotion}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

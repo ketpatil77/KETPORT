@@ -4,7 +4,6 @@ import {
   ArrowDown,
   ArrowRight,
   BriefcaseBusiness,
-  Calendar,
   Download,
   MapPin,
   Sparkles,
@@ -16,8 +15,6 @@ import { GlowingEffect } from '@/components/ui/glowing-effect';
 import { useThemeContext } from '@/context/ThemeContext';
 import { LiquidWebGLBackground } from '@/components/ui/liquid-webgl-bg';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { SplineWithFallback } from '@/components/ui/spline';
-import { getHeroSceneUrl } from '@/config/spline';
 import anime from 'animejs';
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
@@ -40,7 +37,7 @@ export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const { shouldLoad3D, sceneQuality } = useDeviceCapabilities();
-  const lowPerformanceMode = shouldReduceMotion || isMobile || !shouldLoad3D;
+  const lowPerformanceMode = shouldReduceMotion || isMobile || !shouldLoad3D || sceneQuality !== 'high';
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const theme = useThemeContext();
@@ -57,7 +54,7 @@ export function Hero() {
   const titleParts = heroConfig.title.split('|').map((part) => part.trim()).filter(Boolean);
   const mobileHeroLabel = titleParts[0] ?? heroConfig.title;
   const mobileStats = heroConfig.metrics.slice(0, 3);
-
+  const spotlightItems = heroConfig.spotlightItems.slice(0, 3);
   const particlePalette = sceneQuality === 'low'
     ? (isLight ? ['#c84b00', '#e65100'] : ['#ffccbc', '#ff7043'])
     : isLight
@@ -172,22 +169,10 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative overflow-hidden pt-16 pb-10 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-14"
+      className="relative overflow-hidden pt-14 pb-6 sm:pt-16 sm:pb-8 lg:pt-[4.5rem] lg:pb-8"
       style={{ perspective: '1200px' }}
     >
       {!lowPerformanceMode && <LiquidWebGLBackground />}
-
-      {/* 3D Spline Background */}
-      {!lowPerformanceMode && (
-        <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
-          <SplineWithFallback
-            scene={getHeroSceneUrl()}
-            fallback={<div className="h-full w-full" />}
-            className="h-full w-full"
-            containerClassName="h-full w-full"
-          />
-        </div>
-      )}
 
       <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-[0.25]" aria-hidden="true" />
       <div
@@ -196,9 +181,9 @@ export function Hero() {
       />
 
       <div className="container-large relative z-10">
-        <div className="grid items-start gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-8 xl:gap-10">
+        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:gap-5 xl:gap-6">
           {/* ── Left column ── */}
-          <div className="flex flex-col gap-5 md:gap-6">
+          <div className="flex flex-col gap-3.5 md:gap-4.5">
             <div className={shouldReduceMotion ? '' : 'hero-fade-up opacity-0'}>
               <span className="section-eyebrow">
                 <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
@@ -212,11 +197,12 @@ export function Hero() {
               ) : (
                 <>
                   <h1 className="sr-only">{heroConfig.name}</h1>
-                  <ParticleTextEffect
+                <ParticleTextEffect
                     text={heroConfig.name}
-                    className="max-w-[44rem]"
-                    height={190}
+                    className="max-w-[40rem]"
+                    height={120}
                     pixelStep={4}
+                    targetFps={30}
                     fontFamily="'Sentient', 'Times New Roman', serif"
                     fontWeight={700}
                     palette={particlePalette}
@@ -226,8 +212,8 @@ export function Hero() {
 
               <div className={shouldReduceMotion ? '' : 'hero-fade-up opacity-0'}>
                 <p
-                  className="type-heading text-gradient font-semibold"
-                  style={{ fontSize: 'clamp(1.05rem, 2.3vw, 1.55rem)', letterSpacing: '-0.02em' }}
+                  className="type-accent text-gradient font-semibold"
+                  style={{ fontSize: 'clamp(1rem, 2vw, 1.4rem)', letterSpacing: '-0.02em' }}
                 >
                   {heroConfig.title}
                 </p>
@@ -235,24 +221,22 @@ export function Hero() {
             </div>
 
             <p
-              className={`type-body max-w-xl text-sm leading-[1.62] sm:text-base text-[var(--text-300)] ${
+              className={`type-body max-w-[34rem] text-sm leading-[1.6] sm:text-[0.98rem] text-[var(--text-300)] ${
                 lowPerformanceMode ? '' : 'hero-fade-up opacity-0'
               }`}
             >
               {heroConfig.intro}
             </p>
 
-            {/* Role tag */}
             <div className="flex flex-wrap items-center gap-2">
               <span
                 className={`tech-tag ${lowPerformanceMode ? '' : 'hero-tag opacity-0'}`}
-                style={{ minWidth: '15rem' }}
               >
                 {heroConfig.roles[0]}
               </span>
             </div>
 
-            <div className="mt-4 flex flex-col flex-wrap gap-3 sm:flex-row">
+            <div className="mt-2 flex flex-col flex-wrap gap-2.5 sm:flex-row">
               <a
                 href="#portfolio"
                 className={`w-full sm:w-auto ${lowPerformanceMode ? '' : 'btn-magnetic opacity-0'}`}
@@ -272,19 +256,9 @@ export function Hero() {
                   {brandConfig.resumeLabel}
                 </MagneticButton>
               </a>
-              <a
-                href={brandConfig.interviewCtaHref}
-                className={`w-full sm:w-auto ${lowPerformanceMode ? '' : 'btn-magnetic opacity-0'}`}
-              >
-                <MagneticButton variant="secondary" intensity={0.3} className="w-full justify-center sm:w-auto">
-                  <Calendar className="w-4 h-4" />
-                  {brandConfig.interviewCtaLabel}
-                </MagneticButton>
-              </a>
             </div>
 
-            {/* Proof ribbon */}
-            <div className={`proof-ribbon mt-4 backdrop-blur-sm ${lowPerformanceMode ? '' : 'hero-fade-up opacity-0'}`}>
+            <div className={`proof-ribbon mt-2 max-w-[38rem] ${lowPerformanceMode ? '' : 'hero-fade-up opacity-0'}`}>
               {proofConfig.highlights.slice(0, 4).map((metric) => (
                 <div key={metric.label} className="proof-ribbon-item">
                   <p className="proof-ribbon-value">{metric.value}</p>
@@ -297,19 +271,20 @@ export function Hero() {
           {/* ── vCard aside — parallax on desktop ── */}
           <motion.aside
             style={lowPerformanceMode ? undefined : { y: cardParallaxY }}
-            className={`relative mx-auto w-full max-w-[18rem] sm:max-w-[21rem] md:max-w-[24rem] lg:max-w-none origin-center ${
+            className={`relative mx-auto w-full max-w-[20rem] sm:max-w-[22rem] md:max-w-[24rem] lg:max-w-[28rem] xl:max-w-[29rem] origin-center ${
               lowPerformanceMode ? '' : 'hero-card-wrapper opacity-0'
             }`}
           >
             <div
-              className="pointer-events-none absolute -inset-4 rounded-[2.5rem] opacity-30 transition-opacity duration-1000"
-              style={{ background: 'radial-gradient(circle at 50% 80%, rgba(255,112,67,0.18), transparent 70%)' }}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.18] blur-3xl transition-opacity duration-1000"
+              style={{ background: 'radial-gradient(circle, rgba(255,112,67,0.14), transparent 68%)' }}
               aria-hidden="true"
             />
 
             <div
               ref={cardRef}
-              className="card-spotlight surface-card relative overflow-hidden rounded-[1.6rem] bg-[var(--bg-surface)] p-4 shadow-2xl backdrop-blur-sm sm:p-5"
+              className="card-spotlight surface-card relative overflow-hidden rounded-[1.35rem] bg-[var(--bg-surface)] p-3.5"
+              style={{ boxShadow: '0 18px 46px -34px rgba(0, 0, 0, 0.55)' }}
             >
               <div
                 className="absolute inset-x-0 top-0 h-px"
@@ -321,17 +296,7 @@ export function Hero() {
                 aria-hidden="true"
               />
 
-              {heroConfig.backgroundImage && (
-                <div
-                  className="absolute inset-0 opacity-[0.20]"
-                  style={{
-                    background: `linear-gradient(160deg, rgba(2,2,2,0.3), rgba(2,2,2,0.9)), url(${heroConfig.backgroundImage}) center/cover no-repeat`,
-                  }}
-                  aria-hidden="true"
-                />
-              )}
-
-              <div className="relative z-10 flex flex-col gap-4">
+              <div className="relative z-10 flex flex-col gap-2.5">
                 <div
                   className="group relative isolate overflow-hidden rounded-2xl"
                   style={
@@ -360,38 +325,40 @@ export function Hero() {
                   <img
                     src="/images/profile.jpg"
                     alt={`Portrait of ${heroConfig.name}`}
-                    className="aspect-[4/3.6] w-full object-cover transition-transform duration-1000 group-hover:scale-[1.05]"
+                    className="aspect-[4/4.5] w-full object-cover object-top transition-transform duration-1000 group-hover:scale-[1.04]"
                     loading="eager"
                     decoding="async"
                     fetchPriority="high"
                   />
                 </div>
 
-                <div className="grid gap-2">
-                  <div className="surface-soft flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2.5 shadow-sm">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="surface-soft flex items-start gap-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2.5 shadow-sm">
                     <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
-                    <div>
-                      <p className="text-sm font-semibold text-[var(--text-100)]">Location</p>
-                      <p className="text-sm text-[var(--text-300)]">{heroConfig.location}</p>
+                    <div className="flex min-h-full flex-col justify-start">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--cyan-full)]/80">Location</p>
+                      <p className="type-body mt-1 text-[13px] leading-relaxed text-[var(--text-300)]">{heroConfig.location}</p>
                     </div>
                   </div>
-                  <div className="surface-soft flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2.5 shadow-sm">
+                  <div className="surface-soft flex items-start gap-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2.5 shadow-sm">
                     <BriefcaseBusiness className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
-                    <div>
-                      <p className="text-sm font-semibold text-[var(--text-100)]">Availability</p>
-                      <p className="text-sm text-[var(--text-300)]">{heroConfig.availability}</p>
+                    <div className="flex min-h-full flex-col justify-start">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--cyan-full)]/80">Availability</p>
+                      <p className="type-body mt-1 text-[13px] leading-relaxed text-[var(--text-300)]">{heroConfig.availability}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid gap-2">
-                  {heroConfig.spotlightItems.map((item) => (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {spotlightItems.map((item, index) => (
                     <div
                       key={item.label}
-                      className="flex flex-col gap-1.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3.5 py-3"
+                      className={`flex flex-col justify-start gap-1 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2.5 ${
+                        index === spotlightItems.length - 1 && spotlightItems.length % 2 === 1 ? 'sm:col-span-2' : ''
+                      }`}
                     >
                       <p className="type-meta text-[0.58rem] font-bold text-[var(--cyan-full)]">{item.label}</p>
-                      <p className="text-sm leading-relaxed text-[var(--text-200)]">{item.value}</p>
+                      <p className="type-body text-[12.5px] leading-relaxed text-[var(--text-200)]">{item.value}</p>
                     </div>
                   ))}
                 </div>

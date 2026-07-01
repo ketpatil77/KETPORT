@@ -7,9 +7,11 @@ import { motionTokens } from '@/lib/motion';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { GlowingEffect } from '@/components/ui/glowing-effect';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 export function Portfolio() {
   const shouldReduceMotion = useReducedMotion();
+  const { sceneQuality } = useDeviceCapabilities();
   const [activeIdx, setActiveIdx] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const projects = portfolioConfig.projects;
@@ -30,7 +32,6 @@ export function Portfolio() {
 
   return (
     <section ref={sectionRef} id="portfolio" className="section-shell relative overflow-hidden">
-      {/* Background radial glow */}
       <motion.div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.07] sm:h-[560px] sm:w-[560px] lg:h-[700px] lg:w-[700px]"
         style={{
@@ -41,7 +42,6 @@ export function Portfolio() {
       />
 
       <div className="container-large relative z-10">
-        {/* Left-aligned Section Header for consistency */}
         <ScrollReveal direction="up" distance={24}>
           <div className="section-header items-start text-left">
             <span className="section-eyebrow">
@@ -58,9 +58,8 @@ export function Portfolio() {
           </div>
         </ScrollReveal>
 
-        {/* Project Tab Selector */}
-        <div className="relative mt-8 border-b border-[var(--border-subtle)] pb-2">
-          <div className="scrollbar-none flex overflow-x-auto gap-2 py-1 scroll-smooth">
+        <div className="relative mt-4 border-b border-[var(--border-subtle)] pb-1">
+          <div className="scrollbar-none flex gap-1.5 overflow-x-auto py-1.5 scroll-smooth [mask-image:linear-gradient(to_right,black_88%,transparent)]">
             {projects.map((project, idx) => {
               const isActive = idx === activeIdx;
               const displayNum = String(idx + 1).padStart(2, '0');
@@ -68,7 +67,7 @@ export function Portfolio() {
                 <button
                   key={project.title}
                   onClick={() => setActiveIdx(idx)}
-                  className="focus-ring relative shrink-0 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] flex items-center gap-2"
+                  className="focus-ring relative flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.11em] transition-all"
                   style={{
                     color: isActive ? 'var(--cyan-full)' : 'var(--text-300)',
                   }}
@@ -94,7 +93,6 @@ export function Portfolio() {
           </div>
         </div>
 
-        {/* Selected Project Showcase & Details Bento */}
         <ScrollReveal direction="up" distance={28} delay={0.1}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -103,12 +101,11 @@ export function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: motionTokens.ease.standard }}
-            className="mt-8 grid gap-6 lg:grid-cols-12"
+            className="mt-4 grid items-stretch gap-3 xl:grid-cols-[minmax(300px,0.74fr)_minmax(0,1.26fr)]"
             style={shouldReduceMotion ? undefined : { y: showcaseY }}
           >
-            {/* Left: Browser Mockup Visual Stage */}
-            <div className="lg:col-span-5 flex flex-col justify-start">
-              <TiltCard maxTilt={3} scale={1.01} disabled={Boolean(shouldReduceMotion)} className="h-full">
+            <div className="flex flex-col justify-start">
+              <TiltCard maxTilt={2.5} scale={1.005} disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'} className="h-full">
                 <div
                   className="glass-card relative flex h-full flex-col overflow-hidden rounded-2xl border"
                   style={{
@@ -116,9 +113,8 @@ export function Portfolio() {
                     boxShadow: 'var(--shadow-card)',
                   }}
                 >
-                  {/* Glowing Effect Background */}
                   <GlowingEffect
-                    disabled={Boolean(shouldReduceMotion)}
+                    disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
                     glow
                     blur={6}
                     spread={60}
@@ -129,8 +125,7 @@ export function Portfolio() {
                     className="z-0 rounded-2xl opacity-80"
                   />
 
-                  {/* Browser Mockup Title Bar */}
-                  <div className="relative z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-3">
+                  <div className="relative z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2">
                     <div className="flex gap-1.5">
                       <span className="h-3 w-3 rounded-full bg-[#ff5f56]" />
                       <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
@@ -142,68 +137,96 @@ export function Portfolio() {
                     <span className="font-mono text-xs text-[var(--text-300)]">{activeProject.year}</span>
                   </div>
 
-                  {/* Image container */}
-                  <div className="relative z-10 aspect-[4/3] w-full overflow-hidden bg-black/40 lg:aspect-auto lg:flex-1">
+                  <div className="relative z-10 aspect-[4/2.56] w-full overflow-hidden bg-black/40">
                     <img
                       src={activeProject.posterImage}
                       alt={`${activeProject.title} preview`}
-                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+                      className="h-full w-full object-cover object-top transition-transform duration-700 hover:scale-[1.03]"
                       loading="eager"
                     />
+                  </div>
+
+                  <div className="relative z-10 grid gap-2 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2.5">
+                    <div className="grid items-stretch gap-2 sm:grid-cols-2">
+                      <div className="flex h-full flex-col rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-2.5">
+                        <p className="text-[9px] font-mono uppercase tracking-[0.18em] text-[var(--text-400)]">Impact</p>
+                        <p className="mt-1 text-[13px] font-semibold leading-relaxed text-[var(--text-100)]">{activeProject.impact}</p>
+                      </div>
+                      <div className="flex h-full flex-col rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-2.5">
+                        <p className="text-[9px] font-mono uppercase tracking-[0.18em] text-[var(--text-400)]">System</p>
+                        <p className="mt-1 text-[13px] font-semibold leading-relaxed text-[var(--text-100)]">{activeProject.outcome}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </TiltCard>
             </div>
 
-            {/* Right: Details Bento Container */}
-            <div className="lg:col-span-7 flex flex-col gap-4">
-              {/* Bento Row 1: Overview */}
-              <div className="glass-card rounded-2xl border border-[var(--border-subtle)] p-5 relative overflow-hidden">
-                <span className="absolute right-4 top-4 text-xs font-mono font-bold text-[var(--cyan-full)]">
+            <div className="flex h-full flex-col gap-2.5">
+              <div className="glass-card relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] p-3 sm:p-3.5">
+                <span className="absolute right-4 top-4 rounded-full border border-[var(--border-accent)] bg-[var(--accent-glow)] px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-[var(--cyan-full)]">
                   {activeProject.duration}
                 </span>
                 <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--cyan-dim)]">
                   {activeProject.category}
                 </p>
-                <h3 className="type-heading mt-1.5 text-2xl font-extrabold text-[var(--text-100)]">
+                <h3 className="type-heading mt-1 pr-20 text-[1.2rem] font-extrabold leading-none text-[var(--text-100)] sm:text-[1.42rem]">
                   {activeProject.title}
                 </h3>
                 <p className="mt-1 text-xs font-semibold text-[var(--text-300)]">
                   Role: <span className="text-[var(--text-200)]">{activeProject.role}</span>
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--text-200)]">
+                <p className="type-body mt-2 text-[0.87rem] leading-relaxed text-[var(--text-200)]">
                   {activeProject.summary}
                 </p>
-              </div>
 
-              {/* Bento Row 2: Metrics Grid */}
-              <div className="glass-card rounded-2xl border border-[var(--border-subtle)] p-5">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-400)] mb-3">
-                  Measurable Impact
-                </p>
-                <div className="grid gap-3 grid-cols-2">
+                <div className="mt-3 flex flex-wrap gap-1.5">
                   {activeProject.metrics.map((metric) => (
-                    <div
+                    <span
                       key={metric}
-                      className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-3 shadow-xs"
+                      className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-2.5 py-1 text-[10px] font-semibold text-[var(--text-200)]"
                     >
-                      <p className="text-[9px] font-mono font-bold text-[var(--cyan-full)] uppercase tracking-wider">
-                        Key Outcome
-                      </p>
-                      <p className="mt-1 text-xs font-semibold leading-relaxed text-[var(--text-100)]">{metric}</p>
-                    </div>
+                      {metric}
+                    </span>
                   ))}
+                </div>
+
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                  <a
+                    href={activeProject.liveHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary focus-ring flex-1 text-xs min-h-[42px] items-center justify-center font-bold"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      {primaryActionLabel}
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </span>
+                  </a>
+                  <a
+                    href={activeProject.codeHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-outline focus-ring flex-1 text-xs min-h-[42px] items-center justify-center font-bold"
+                    style={{ background: 'var(--bg-elevated)' }}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      View Code
+                      <Code2 className="h-3.5 w-3.5" />
+                    </span>
+                  </a>
                 </div>
               </div>
 
-              {/* Bento Row 3: Achievements & Stack */}
-              <div className="grid gap-4 md:grid-cols-2">
-                {/* Tech Stack */}
-                <div className="glass-card rounded-2xl border border-[var(--border-subtle)] p-5 flex flex-col">
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-400)] mb-3">
-                    Active Stack
+              <div className="grid items-stretch gap-2.5 lg:grid-cols-[minmax(0,1.03fr)_minmax(260px,0.97fr)]">
+                <div className="glass-card h-full rounded-2xl border border-[var(--border-subtle)] p-3">
+                  <p className="mb-2.5 text-[10px] font-mono uppercase tracking-widest text-[var(--text-400)]">
+                    Stack Snapshot
                   </p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <p className="type-body text-[13px] leading-relaxed text-[var(--text-200)]">
+                    {activeProject.stackSummary}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {activeProject.tech.map((tech) => (
                       <span key={tech} className="tech-tag">
                         {tech}
@@ -212,48 +235,18 @@ export function Portfolio() {
                   </div>
                 </div>
 
-                {/* Highlights */}
-                <div className="glass-card rounded-2xl border border-[var(--border-subtle)] p-5 flex flex-col justify-between">
-                  <div>
-                    <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-400)] mb-3">
-                      Key Highlights
-                    </p>
-                    <ul className="space-y-2">
-                      {activeProject.highlights.map((highlight) => (
-                        <li key={highlight} className="flex gap-2 text-xs leading-relaxed text-[var(--text-200)]">
-                          <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Actions Row */}
-                  <div className="mt-5 flex gap-3">
-                    <a
-                      href={activeProject.liveHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary focus-ring flex-1 text-xs min-h-[40px] items-center justify-center font-bold"
-                    >
-                      <span className="flex items-center gap-1.5">
-                        {primaryActionLabel}
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </span>
-                    </a>
-                    <a
-                      href={activeProject.codeHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-outline focus-ring flex-1 text-xs min-h-[40px] items-center justify-center font-bold"
-                      style={{ background: 'var(--bg-elevated)' }}
-                    >
-                      <span className="flex items-center gap-1.5">
-                        View Code
-                        <Code2 className="h-3.5 w-3.5" />
-                      </span>
-                    </a>
-                  </div>
+                <div className="glass-card h-full rounded-2xl border border-[var(--border-subtle)] p-3">
+                  <p className="mb-2.5 text-[10px] font-mono uppercase tracking-widest text-[var(--text-400)]">
+                    Delivery Highlights
+                  </p>
+                  <ul className="space-y-2">
+                    {activeProject.highlights.map((highlight) => (
+                      <li key={highlight} className="type-body flex gap-2 text-[13px] leading-relaxed text-[var(--text-200)]">
+                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cyan-full)]" aria-hidden="true" />
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>

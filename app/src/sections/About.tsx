@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { BadgeCheck, Sparkles } from 'lucide-react';
 import { aboutConfig } from '@/config';
+import { heroConfig } from '@/config';
 import { AnimatedText } from '@/components/AnimatedText';
 import { motionTokens } from '@/lib/motion';
 import { GlowingEffect } from '@/components/ui/glowing-effect';
@@ -10,16 +11,19 @@ import { ScrollRevealText } from '@/components/ui/scroll-reveal-text';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
 import { useThemeContext } from '@/context/ThemeContext';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { LazySpline } from '@/components/ui/spline';
-import { getAboutSceneUrl } from '@/config/spline';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { useSectionScrollFX } from '@/hooks/useSectionScrollFX';
+import { SectionScrollProgress } from '@/components/SectionScrollProgress';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 export function About() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const { sceneQuality } = useDeviceCapabilities();
   const theme = useThemeContext();
   const isLight = theme === 'light';
   const sectionRef = useRef<HTMLElement>(null);
+  const { headerStyle, bodyStyle, accentStyle } = useSectionScrollFX(sectionRef);
 
   // Parallax on the two image tiles — opposing vertical speeds
   const { scrollYProgress } = useScroll({
@@ -48,35 +52,20 @@ export function About() {
 
   return (
     <section ref={sectionRef} id="about" className="section-shell relative overflow-hidden">
-      <div
+      {!shouldReduceMotion && sceneQuality === 'high' && <SectionScrollProgress scrollYProgress={scrollYProgress} />}
+      <motion.div
         className="ambient-blob pointer-events-none absolute -bottom-16 -right-16 h-[360px] w-[360px] opacity-[0.05] rounded-full sm:h-[460px] sm:w-[460px] lg:h-[560px] lg:w-[560px]"
-        style={{ background: 'radial-gradient(circle, #c9a961, transparent 65%)', filter: 'blur(90px)' }}
+        style={{ background: 'radial-gradient(circle, #c9a961, transparent 65%)', filter: 'blur(90px)', ...accentStyle }}
         aria-hidden="true"
       />
-      <div
+      <motion.div
         className="ambient-blob pointer-events-none absolute top-0 left-1/4 h-[260px] w-[260px] opacity-[0.04] rounded-full sm:h-[320px] sm:w-[320px] lg:h-[360px] lg:w-[360px]"
         style={{ background: 'radial-gradient(circle, #ff7043, transparent 65%)', filter: 'blur(70px)', animationDelay: '6s' }}
         aria-hidden="true"
       />
-      
-      {/* 3D Spline Ambient Background */}
-      {!shouldReduceMotion && !isMobile && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-          <LazySpline
-            scene={getAboutSceneUrl()}
-            fallback={<div className="h-full w-full" />}
-            className="h-full w-full opacity-20"
-            containerClassName="h-full w-full"
-            rootMargin="220px"
-          />
-        </div>
-      )}
-      
-      
-
       <div className="container-large relative z-10">
         <ScrollReveal direction="up" distance={20}>
-          <div className="section-header items-start text-left">
+          <motion.div className="section-header items-start text-left" style={headerStyle}>
             <span className="section-eyebrow">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               {aboutConfig.label}
@@ -98,17 +87,17 @@ export function About() {
             ) : (
               <p className="section-copy type-body max-w-3xl">{aboutConfig.description}</p>
             )}
-          </div>
+          </motion.div>
         </ScrollReveal>
 
-        <div className="mt-8 grid items-start gap-6 lg:grid-cols-2 lg:gap-8 xl:mt-10">
+        <motion.div className="mt-6 grid items-start gap-4 lg:grid-cols-[0.95fr_1.05fr] lg:gap-5 xl:mt-8" style={bodyStyle}>
           {/* ── Images with parallax + tilt ── */}
           <motion.div
             initial={{ opacity: 0, x: -24, scale: 0.98 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={shouldReduceMotion ? { duration: 0 } : motionTokens.spring.soft}
-            className="hidden grid-cols-2 gap-3 sm:grid"
+            className="hidden grid-cols-2 gap-3 sm:grid lg:max-w-[38rem]"
           >
             {aboutConfig.images.slice(0, 2).map((image, idx) => (
               <motion.div
@@ -118,12 +107,12 @@ export function About() {
                 <TiltCard
                   maxTilt={5}
                   scale={1.03}
-                  disabled={Boolean(shouldReduceMotion) || isMobile}
+                  disabled={Boolean(shouldReduceMotion) || isMobile || sceneQuality !== 'high'}
                   className="group surface-card relative isolate overflow-hidden rounded-2xl"
-                  style={{ aspectRatio: idx === 0 ? '4/5' : '4/4.6', ...imageFrameStyle } as React.CSSProperties}
+                  style={{ aspectRatio: idx === 0 ? '4/4.2' : '4/4', ...imageFrameStyle } as React.CSSProperties}
                 >
                   <GlowingEffect
-                    disabled={Boolean(shouldReduceMotion)}
+                    disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
                     glow
                     blur={6}
                     spread={72}
@@ -145,7 +134,7 @@ export function About() {
 
             {/* Experience bar with animated counter */}
             <div
-              className="col-span-2 relative overflow-hidden rounded-2xl p-4 sm:p-5"
+              className="col-span-2 relative overflow-hidden rounded-2xl p-3.5 sm:p-4"
               style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
             >
               <div
@@ -153,7 +142,7 @@ export function About() {
                 style={{ background: 'linear-gradient(to bottom, var(--cyan-full), var(--violet))' }}
                 aria-hidden="true"
               />
-              <div className="flex items-center gap-4 pl-2">
+              <div className="flex items-center gap-3 pl-2">
                 <p className="type-hero font-extrabold leading-none" style={{ color: 'var(--cyan-full)', fontSize: 'clamp(2.1rem, 4vw, 3rem)' }}>
                   {expNum > 0 && !shouldReduceMotion ? (
                     <AnimatedCounter value={expNum} suffix={expSuffix} durationMs={1400} />
@@ -161,7 +150,7 @@ export function About() {
                     aboutConfig.experienceValue
                   )}
                 </p>
-                <p className="whitespace-pre-line text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-400)' }}>
+                <p className="whitespace-pre-line text-[0.8rem] font-semibold uppercase tracking-[0.12em]" style={{ color: 'var(--text-400)' }}>
                   {aboutConfig.experienceLabel}
                 </p>
               </div>
@@ -174,12 +163,12 @@ export function About() {
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={shouldReduceMotion ? { duration: 0 } : { ...motionTokens.spring.soft, delay: 0.08 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-3"
           >
             {/* Mobile-only: banner photo + exp bar */}
             <div className="sm:hidden">
               <div className="about-banner-photo">
-                <img src="/images/profile.jpg" alt="Ketan Patil" loading="lazy" />
+                <img src="/images/profile.jpg" alt={heroConfig.name} loading="lazy" />
               </div>
               <div className="about-exp-bar">
                 <span className="about-exp-value">{aboutConfig.experienceValue}</span>
@@ -187,18 +176,18 @@ export function About() {
               </div>
             </div>
 
-            <div className="glass-card relative rounded-2xl p-4 sm:p-5">
+            <div className="glass-card relative rounded-2xl p-4">
               <div
                 className="absolute inset-x-0 top-0 h-px rounded-t-2xl"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(255,112,67,0.2) 50%, transparent)' }}
                 aria-hidden="true"
               />
-              <p className="type-meta mb-2.5 text-xs font-semibold" style={{ color: 'var(--cyan-full)' }}>
+              <p className="type-meta mb-2 text-[11px] font-semibold" style={{ color: 'var(--cyan-full)' }}>
                 Professional Snapshot
               </p>
 
               {/* Desktop staggered strengths list */}
-              <ul className="hidden grid-cols-1 gap-3 sm:grid sm:grid-cols-2">
+              <ul className="hidden grid-cols-1 gap-2.5 sm:grid sm:grid-cols-2">
                 {aboutConfig.strengths.map((strength, i) => (
                   <motion.li
                     key={strength}
@@ -206,7 +195,7 @@ export function About() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={shouldReduceMotion ? { duration: 0 } : { delay: i * 0.05, duration: 0.35 }}
-                    className="flex items-start gap-2.5 text-sm"
+                    className="type-body flex items-start gap-2.5 text-[13px] leading-relaxed"
                     style={{ color: 'var(--text-200)' }}
                   >
                     <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--cyan-full)' }} aria-hidden="true" />
@@ -226,7 +215,7 @@ export function About() {
               </div>
 
               {/* Languages */}
-              <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
+              <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
                 <p className="type-meta mb-2 text-[0.65rem] font-bold uppercase tracking-widest text-[var(--text-400)]">
                   Working Languages
                 </p>
@@ -238,7 +227,7 @@ export function About() {
                       whileInView={shouldReduceMotion ? {} : { opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={shouldReduceMotion ? { duration: 0 } : { delay: i * 0.06 }}
-                      className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-1 text-[0.65rem] font-medium text-[var(--text-300)] shadow-sm transition-colors hover:border-[var(--border-dim)] hover:text-[var(--text-200)]"
+                      className="type-body rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-1 text-[0.65rem] font-medium text-[var(--text-300)] shadow-sm transition-colors hover:border-[var(--border-dim)] hover:text-[var(--text-200)]"
                     >
                       {lang}
                     </motion.span>
@@ -247,7 +236,7 @@ export function About() {
               </div>
 
               {/* Focus areas */}
-              <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
+              <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
                 <p className="type-meta mb-2 text-[0.65rem] font-bold uppercase tracking-widest text-[var(--text-400)]">
                   Domain Focus
                 </p>
@@ -260,7 +249,7 @@ export function About() {
                       viewport={{ once: true }}
                       transition={shouldReduceMotion ? { duration: 0 } : { delay: i * 0.05 }}
                       whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.03 }}
-                      className="cursor-default rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-1 text-[0.65rem] font-medium text-[var(--text-300)] shadow-sm transition-colors hover:border-[var(--border-dim)] hover:text-[var(--text-200)]"
+                      className="type-body cursor-default rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-1 text-[0.65rem] font-medium text-[var(--text-300)] shadow-sm transition-colors hover:border-[var(--border-dim)] hover:text-[var(--text-200)]"
                     >
                       {focusArea}
                     </motion.span>
@@ -269,7 +258,7 @@ export function About() {
               </div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

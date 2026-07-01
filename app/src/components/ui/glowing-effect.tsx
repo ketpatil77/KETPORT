@@ -101,12 +101,19 @@ const GlowingEffect = memo(
       if (disabled) return;
       const pointerQuery = window.matchMedia("(pointer: fine)");
       if (!pointerQuery.matches) return;
+      const element = containerRef.current;
+      const host = element?.parentElement;
+      if (!element || !host) return;
 
-      const handleScroll = () => handleMove();
       const handlePointerMove = (e: PointerEvent) => handleMove(e);
+      const handlePointerLeave = () => {
+        element.style.setProperty("--active", glow ? "1" : "0");
+      };
 
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      document.body.addEventListener("pointermove", handlePointerMove, {
+      host.addEventListener("pointermove", handlePointerMove, {
+        passive: true,
+      });
+      host.addEventListener("pointerleave", handlePointerLeave, {
         passive: true,
       });
 
@@ -114,10 +121,10 @@ const GlowingEffect = memo(
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
-        window.removeEventListener("scroll", handleScroll);
-        document.body.removeEventListener("pointermove", handlePointerMove);
+        host.removeEventListener("pointermove", handlePointerMove);
+        host.removeEventListener("pointerleave", handlePointerLeave);
       };
-    }, [handleMove, disabled]);
+    }, [glow, handleMove, disabled]);
 
     return (
       <>
