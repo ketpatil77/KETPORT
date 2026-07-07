@@ -8,9 +8,9 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   language: 'en',
-  title: 'Ketan Patil | AI/ML Engineer, Full-Stack Developer, Cybersecurity Analyst',
+  title: 'Ketan Patil | AI/ML Systems, Cybersecurity & Production Platforms',
   description:
-    'Portfolio of Ketan Patil: AI/ML engineer, full-stack developer, cybersecurity analyst, three-time published researcher, and internship-backed systems builder.',
+    'Portfolio of Ketan Patil: AI/ML systems builder, cybersecurity practitioner, full-stack engineer, and published researcher with measurable delivery outcomes.',
 };
 
 export interface BrandConfig {
