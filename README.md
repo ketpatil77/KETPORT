@@ -81,3 +81,5 @@ npm run preview
 - Main frontend source lives under `app/`
 - Root scripts proxy into `app/`
 - Public resume asset lives under `app/public/resume/`
+
+thanks
