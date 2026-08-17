@@ -192,7 +192,7 @@ export function Hero() {
             </div>
 
             <div className="space-y-1">
-              {lowPerformanceMode ? (
+              {shouldReduceMotion ? (
                 <h1 className="hero-heading text-balance">{heroConfig.name}</h1>
               ) : (
                 <>
