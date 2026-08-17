@@ -497,9 +497,11 @@
   .text-gradient,
   .text-gradient-cyan {
     background: linear-gradient(120deg, #fff 20%, var(--cyan-full) 60%, rgba(255, 180, 140, 0.9) 100%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: shimmer 4.5s linear infinite;
   }
 
   /* Warm cream gradient */
@@ -1002,9 +1004,11 @@
     line-height: 0.98;
     letter-spacing: -0.03em;
     background: linear-gradient(170deg, #ffffff 0%, rgba(255, 255, 255, 0.92) 38%, rgba(255, 210, 190, 0.80) 70%, rgba(255, 112, 67, 0.65) 100%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: shimmer 4.5s linear infinite;
   }
 
   /* ── Stat accent numbers ── */
@@ -1077,18 +1081,22 @@
       rgba(13, 12, 10, 0.82) 38%,
       rgba(180, 60, 10, 0.72) 72%,
       rgba(230, 81, 0, 0.60) 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: shimmer 4.5s linear infinite;
 }
 
 /* ── Text gradient (title/role line) — ink to warm orange ── */
 [data-theme="light"] .text-gradient,
 [data-theme="light"] .text-gradient-cyan {
   background: linear-gradient(120deg, #0D0C0A 20%, #e65100 60%, #bf360c 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: shimmer 4.5s linear infinite;
 }
 
 /* ── Warm cream gradient — ink to orange ── */
