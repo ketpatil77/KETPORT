@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { initWebVitals } from './lib/monitoring'
-import { SmoothScroll } from './components/SmoothScroll'
 
 const BUILD_VERSION = '20260701-portfolio-v5'
 
@@ -13,8 +12,6 @@ initWebVitals()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SmoothScroll>
-      <App />
-    </SmoothScroll>
+    <App />
   </StrictMode>,
 )
