@@ -7,11 +7,9 @@ import { motionTokens } from '@/lib/motion';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { GlowingEffect } from '@/components/ui/glowing-effect';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 export function Portfolio() {
   const shouldReduceMotion = useReducedMotion();
-  const { sceneQuality } = useDeviceCapabilities();
   const [activeIdx, setActiveIdx] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const projects = portfolioConfig.projects;
@@ -105,7 +103,7 @@ export function Portfolio() {
             style={shouldReduceMotion ? undefined : { y: showcaseY }}
           >
             <div className="flex flex-col justify-start">
-              <TiltCard maxTilt={2.5} scale={1.005} disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'} className="h-full">
+              <TiltCard maxTilt={2.5} scale={1.005} disabled={Boolean(shouldReduceMotion)} className="h-full">
                 <div
                   className="glass-card relative flex h-full flex-col overflow-hidden rounded-2xl border"
                   style={{
@@ -114,7 +112,7 @@ export function Portfolio() {
                   }}
                 >
                   <GlowingEffect
-                    disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
+                    disabled={Boolean(shouldReduceMotion)}
                     glow
                     blur={6}
                     spread={60}

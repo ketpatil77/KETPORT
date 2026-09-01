@@ -10,7 +10,6 @@ import { useThemeContext } from '@/context/ThemeContext';
 import { DragScroll } from '@/components/ui/drag-scroll';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 const brandColorMapDark: Record<string, string> = {
   NVIDIA: '#84cc16',
@@ -81,7 +80,6 @@ function LogoChip({
 export function TechStack() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const { sceneQuality } = useDeviceCapabilities();
   const theme = useThemeContext();
   const isLight = theme === 'light';
   const sectionRef = useRef<HTMLElement>(null);
@@ -313,7 +311,7 @@ export function TechStack() {
                         key={item.name}
                         maxTilt={5}
                         scale={1.02}
-                        disabled={Boolean(shouldReduceMotion) || isMobile || sceneQuality !== 'high'}
+                        disabled={Boolean(shouldReduceMotion) || isMobile}
                         className="h-full"
                       >
                         <div

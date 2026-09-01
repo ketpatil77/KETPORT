@@ -14,12 +14,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { useSectionScrollFX } from '@/hooks/useSectionScrollFX';
 import { SectionScrollProgress } from '@/components/SectionScrollProgress';
-import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 export function About() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const { sceneQuality } = useDeviceCapabilities();
   const theme = useThemeContext();
   const isLight = theme === 'light';
   const sectionRef = useRef<HTMLElement>(null);
@@ -52,7 +50,7 @@ export function About() {
 
   return (
     <section ref={sectionRef} id="about" className="section-shell relative overflow-hidden">
-      {!shouldReduceMotion && sceneQuality === 'high' && <SectionScrollProgress scrollYProgress={scrollYProgress} />}
+      {!shouldReduceMotion && <SectionScrollProgress scrollYProgress={scrollYProgress} />}
       <motion.div
         className="ambient-blob pointer-events-none absolute -bottom-16 -right-16 h-[360px] w-[360px] opacity-[0.05] rounded-full sm:h-[460px] sm:w-[460px] lg:h-[560px] lg:w-[560px]"
         style={{ background: 'radial-gradient(circle, #c9a961, transparent 65%)', filter: 'blur(90px)', ...accentStyle }}
@@ -107,12 +105,12 @@ export function About() {
                 <TiltCard
                   maxTilt={5}
                   scale={1.03}
-                  disabled={Boolean(shouldReduceMotion) || isMobile || sceneQuality !== 'high'}
+                  disabled={Boolean(shouldReduceMotion) || isMobile}
                   className="group surface-card relative isolate overflow-hidden rounded-2xl"
                   style={{ aspectRatio: idx === 0 ? '4/4.2' : '4/4', ...imageFrameStyle } as React.CSSProperties}
                 >
                   <GlowingEffect
-                    disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
+                    disabled={Boolean(shouldReduceMotion)}
                     glow
                     blur={6}
                     spread={72}
@@ -168,7 +166,7 @@ export function About() {
             {/* Mobile-only: banner photo + exp bar */}
             <div className="sm:hidden">
               <div className="about-banner-photo">
-                <img src="/images/profile.jpg" alt={heroConfig.name} loading="lazy" />
+                <img src="/images/profile.jpg?v=20260707-2" alt={heroConfig.name} loading="lazy" />
               </div>
               <div className="about-exp-bar">
                 <span className="about-exp-value">{aboutConfig.experienceValue}</span>

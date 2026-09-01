@@ -7,7 +7,6 @@ import { motionTokens } from '@/lib/motion';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { useSectionScrollFX } from '@/hooks/useSectionScrollFX';
-import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 function renderServiceIcon(iconName: string, className: string) {
   const props = { className, 'aria-hidden': true as const };
@@ -170,7 +169,6 @@ function ServiceCard({
 
 export function Services() {
   const shouldReduceMotion = useReducedMotion();
-  const { sceneQuality } = useDeviceCapabilities();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const { headerStyle, bodyStyle, accentStyle } = useSectionScrollFX(sectionRef);
@@ -294,7 +292,7 @@ export function Services() {
               key={service.title}
               maxTilt={4}
               scale={1.015}
-              disabled={Boolean(shouldReduceMotion) || sceneQuality !== 'high'}
+              disabled={Boolean(shouldReduceMotion)}
               className="h-full"
             >
               <ServiceCard

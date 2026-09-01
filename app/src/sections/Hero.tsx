@@ -37,7 +37,10 @@ export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const { shouldLoad3D, sceneQuality } = useDeviceCapabilities();
-  const lowPerformanceMode = shouldReduceMotion || isMobile || !shouldLoad3D || sceneQuality !== 'high';
+  // Keep accessible reduced-motion behavior, but do not disable lightweight
+  // canvas/CSS/Anime.js effects just because WebGL is unavailable or throttled.
+  const lowPerformanceMode = Boolean(shouldReduceMotion);
+  const shouldRenderWebGL = !lowPerformanceMode && shouldLoad3D && sceneQuality === 'high';
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const theme = useThemeContext();
@@ -124,7 +127,7 @@ export function Hero() {
         <div className="hero-vcard-photo">
           <div className="hero-vcard-badge">Available 2026</div>
           <img
-            src="/images/profile.jpg"
+            src="/images/profile.jpg?v=20260707-2"
             alt={`Portrait of ${heroConfig.name}`}
             loading="eager"
             decoding="async"
@@ -172,7 +175,7 @@ export function Hero() {
       className="relative overflow-hidden pt-14 pb-6 sm:pt-16 sm:pb-8 lg:pt-[4.5rem] lg:pb-8"
       style={{ perspective: '1200px' }}
     >
-      {!lowPerformanceMode && <LiquidWebGLBackground />}
+      {shouldRenderWebGL && <LiquidWebGLBackground />}
 
       <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-[0.25]" aria-hidden="true" />
       <div
@@ -323,7 +326,7 @@ export function Hero() {
                     className="z-20 rounded-2xl opacity-100 mix-blend-screen"
                   />
                   <img
-                    src="/images/profile.jpg"
+                    src="/images/profile.jpg?v=20260707-2"
                     alt={`Portrait of ${heroConfig.name}`}
                     className="aspect-[4/4.5] w-full object-cover object-top transition-transform duration-1000 group-hover:scale-[1.04]"
                     loading="eager"
