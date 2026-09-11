@@ -1,25 +1,18 @@
 # KETPORT
 
-Professional portfolio platform for Ketan Patil. Built to present engineering work, research, services, and product thinking through fast, modern frontend delivery.
+A professional portfolio website for Ketan Patil, focused on presenting engineering projects, research, services, and product work through a fast, responsive frontend.
 
-## Live Surface
+## Live Links
 
-- Portfolio: [ketpatil77.github.io](https://ketpatil77.github.io)
-- GitHub Profile: [github.com/ketpatil77](https://github.com/ketpatil77)
-- Resume: [KET-RESUME-NEW.pdf](https://ketpatil77.github.io/resume/KET-RESUME-NEW.pdf?v=20260529)
+- Portfolio: <https://ketpatil77.github.io>
+- GitHub: <https://github.com/ketpatil77>
+- Resume: <https://ketpatil77.github.io/resume/KET-RESUME-NEW.pdf>
 
-## What This Project Does
+## Overview
 
-- Presents flagship work, research, experience, and technical depth in one polished site.
-- Ships smooth motion, premium UI treatment, and responsive layouts across desktop and mobile.
-- Includes contact paths, downloadable resume, publication section, and curated project storytelling.
-- Acts as public proof layer for profile, hiring, networking, and client conversations.
+KETPORT brings projects, experience, publications, contact information, and a downloadable resume into one public-facing portfolio. The site emphasizes responsive layouts, clear project storytelling, and lightweight frontend delivery.
 
-## Documentation
-
-- [Architecture overview](docs/architecture.md)
-
-## Stack
+## Tech Stack
 
 - React
 - TypeScript
@@ -27,59 +20,58 @@ Professional portfolio platform for Ketan Patil. Built to present engineering wo
 - Tailwind CSS
 - Motion-focused UI components
 
-## Workspace Layout
-
-This repository uses root workspace scripts and an app subproject:
+## Repository Layout
 
 ```text
-port/
-  app/        # actual Vite frontend
-  README.md   # repo overview
-  package.json
+KETPORT/
+├── app/         # Vite frontend application
+├── docs/        # Project documentation
+├── README.md    # Repository overview
+└── package.json # Root workspace scripts
 ```
 
 ## Local Development
 
-Requirements:
+### Requirements
 
-- Node.js `20.x`
+- Node.js 20.x
 - npm
 
-Install:
+### Install dependencies
 
 ```bash
 npm run install:app
 ```
 
-Start development server:
+### Start the development server
 
 ```bash
 npm run dev
 ```
 
-Build production bundle:
+### Build for production
 
 ```bash
 npm run build
 ```
 
-Preview production build:
+### Preview the production build
 
 ```bash
 npm run preview
 ```
 
-## Quality Bar
+## Content Quality Guidelines
 
-- Responsive on mobile and desktop
-- Resume link must resolve to current PDF
-- Project copy must stay evidence-first, not buzzword-first
-- No stale placeholder content
+- Keep project descriptions factual and evidence-based.
+- Remove stale placeholders before publishing.
+- Keep resume links synchronized with the current published resume.
+- Verify responsive behavior on mobile and desktop before release.
+
+## Documentation
+
+- [Architecture overview](docs/architecture.md)
 
 ## Notes
 
-- Main frontend source lives under `app/`
-- Root scripts proxy into `app/`
-- Public resume asset lives under `app/public/resume/`
-
-thanks
+The main frontend source is under `app/`. Root-level scripts provide the primary developer commands, while public assets and the published resume are maintained inside the frontend application.
