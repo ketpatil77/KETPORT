@@ -108,7 +108,7 @@ export const heroConfig: HeroConfig = {
   backgroundImage: '/images/hero-bg.jpg',
   metrics: [
     { value: '3', label: 'Peer-Reviewed Papers' },
-    { value: '14+', label: 'Verified Certifications' },
+    { value: '27', label: 'Verified Certifications' },
     { value: '15K+', label: 'Daily Requests Supported' },
   ],
   spotlightItems: [
@@ -423,6 +423,87 @@ export const credentialsConfig: CredentialsConfig = {
       verifyHref: 'https://www.cisco.com/go/verifycertificate'
     },
     {
+      name: 'Claude Code in Action',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'Applied Claude Code training focused on using AI-assisted coding workflows in practical engineering tasks.',
+      focusAreas: ['Claude Code', 'AI Coding', 'Developer Workflows'],
+      credentialId: 'axtsz67yxf7b',
+      verifyHref: 'https://verify.skilljar.com/c/axtsz67yxf7b'
+    },
+    {
+      name: 'Claude Platform 101',
+      issuer: 'Anthropic',
+      year: 'Jul 2026',
+      summary: 'Foundation-level Claude platform certificate covering core capabilities and platform-oriented AI usage.',
+      focusAreas: ['Claude Platform', 'AI Tools', 'Applied AI'],
+      credentialId: 'bzgiy39fr9nq',
+      verifyHref: 'https://verify.skilljar.com/c/bzgiy39fr9nq'
+    },
+    {
+      name: 'Introduction to Claude Cowork',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'Introductory training on Claude Cowork concepts for AI-supported collaboration and productivity.',
+      focusAreas: ['Claude Cowork', 'AI Collaboration', 'Productivity'],
+      credentialId: 'gqioehjryquj',
+      verifyHref: 'https://verify.skilljar.com/c/gqioehjryquj'
+    },
+    {
+      name: 'Claude 101',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'Core Claude training covering effective AI interaction, task framing, and responsible usage basics.',
+      focusAreas: ['Claude', 'Prompting', 'AI Fundamentals'],
+      credentialId: 'r3wru7jvbq2t',
+      verifyHref: 'https://verify.skilljar.com/c/r3wru7jvbq2t'
+    },
+    {
+      name: 'Claude Code 101',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'Introductory Claude Code certificate covering AI-assisted development workflows and coding fundamentals.',
+      focusAreas: ['Claude Code', 'AI Development', 'Code Assistance'],
+      credentialId: 'x665x9ixe2a2',
+      verifyHref: 'https://verify.skilljar.com/c/x665x9ixe2a2'
+    },
+    {
+      name: 'Model Context Protocol: Advanced Topics',
+      issuer: 'Anthropic',
+      year: 'Jul 2026',
+      summary: 'Advanced MCP training focused on context integration, tooling, and protocol-aware AI system workflows.',
+      focusAreas: ['MCP', 'AI Tooling', 'Context Engineering'],
+      credentialId: 'ka2napkh76kh',
+      verifyHref: 'https://verify.skilljar.com/c/ka2napkh76kh'
+    },
+    {
+      name: 'AI Fluency: Framework and Foundations',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'AI fluency certificate covering foundational frameworks for understanding and applying AI systems.',
+      focusAreas: ['AI Fluency', 'AI Foundations', 'Frameworks'],
+      credentialId: 'k8o7rqugszpe',
+      verifyHref: 'https://verify.skilljar.com/c/k8o7rqugszpe'
+    },
+    {
+      name: 'AI Fluency for Educators',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'AI fluency track designed for educators, focused on teaching, learning, and responsible AI use.',
+      focusAreas: ['AI Education', 'Teaching with AI', 'AI Literacy'],
+      credentialId: 'n3yj3bhq59hn',
+      verifyHref: 'https://verify.skilljar.com/c/n3yj3bhq59hn'
+    },
+    {
+      name: 'AI Fluency for Students',
+      issuer: 'Anthropic',
+      year: 'May 2026',
+      summary: 'Student-focused AI fluency certificate covering practical AI literacy and effective learning workflows.',
+      focusAreas: ['AI Literacy', 'Student Learning', 'AI Productivity'],
+      credentialId: 'p96yfv2iuyre',
+      verifyHref: 'https://verify.skilljar.com/c/p96yfv2iuyre'
+    },
+    {
       name: 'IBM Cybersecurity Analyst Professional',
       issuer: 'IBM',
       year: 'Jun 2025',
@@ -457,6 +538,33 @@ export const credentialsConfig: CredentialsConfig = {
       focusAreas: ['Cloud Basics', 'Service Models', 'Deployment Patterns'],
       credentialId: 'HGVN64EZ9RS',
       verifyHref: 'https://coursera.org/verify/HGVN64EZ9RS'
+    },
+    {
+      name: 'Cloud Data Engineering',
+      issuer: 'Duke University',
+      year: 'Oct 2026',
+      summary: 'Cloud data engineering course covering data workflows, cloud platforms, and engineering practices for scalable data systems.',
+      focusAreas: ['Cloud Data', 'Data Engineering', 'Cloud Workflows'],
+      credentialId: 'S98B32FCAFSK',
+      verifyHref: 'https://coursera.org/verify/S98B32FCAFSK'
+    },
+    {
+      name: 'Get Started with Cloud Native, DevOps, Agile, and NoSQL',
+      issuer: 'IBM',
+      year: 'Oct 2026',
+      summary: 'IBM cloud-native foundations course covering DevOps, Agile delivery, NoSQL concepts, and modern cloud practices.',
+      focusAreas: ['Cloud Native', 'DevOps', 'NoSQL'],
+      credentialId: 'VDRXDGHSRNJD',
+      verifyHref: 'https://coursera.org/verify/VDRXDGHSRNJD'
+    },
+    {
+      name: 'Introduction to DevOps',
+      issuer: 'IBM',
+      year: 'Oct 2026',
+      summary: 'DevOps introduction covering culture, automation, continuous delivery, and collaborative software operations.',
+      focusAreas: ['DevOps', 'Automation', 'Continuous Delivery'],
+      credentialId: '6M7EDGF3G4R',
+      verifyHref: 'https://coursera.org/verify/6M7EDGF3G4R'
     },
     {
       name: 'Meta Database Engineer',
@@ -664,7 +772,7 @@ export const proofConfig: ProofConfig = {
     'A curated set of projects showing what was built, why it mattered, and what improved in production or research settings.',
   highlights: [
     { label: 'Peer-Reviewed Papers', value: '3' },
-    { label: 'Verified Certifications', value: '14+' },
+    { label: 'Verified Certifications', value: '27' },
     { label: 'Daily Traffic Supported', value: '15K+' },
     { label: 'Attack Surface Reduction', value: '~40%' },
   ],

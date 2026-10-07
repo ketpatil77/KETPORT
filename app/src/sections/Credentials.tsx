@@ -41,10 +41,22 @@ interface CertCard {
 const CATEGORY_MAP: Record<string, string> = {
   'Cisco Certified Network Professional Routing and Switching': 'Networking',
   'Cisco Certified Network Associate Routing and Switching': 'Networking',
+  'Claude Code in Action': 'AI & Agents',
+  'Claude Platform 101': 'AI & Agents',
+  'Introduction to Claude Cowork': 'AI & Agents',
+  'Claude 101': 'AI & Agents',
+  'Claude Code 101': 'AI & Agents',
+  'Model Context Protocol: Advanced Topics': 'AI & Agents',
+  'AI Fluency: Framework and Foundations': 'AI & Agents',
+  'AI Fluency for Educators': 'AI & Agents',
+  'AI Fluency for Students': 'AI & Agents',
   'IBM Cybersecurity Analyst Professional': 'Cybersecurity',
   'Penetration Testing, Threat Hunting, and Cryptography': 'Cybersecurity',
   'Python for Data Science, AI & Development': 'Data & AI',
   'Introduction to Cloud Computing': 'Cloud Computing',
+  'Cloud Data Engineering': 'Cloud Computing',
+  'Get Started with Cloud Native, DevOps, Agile, and NoSQL': 'Cloud Computing',
+  'Introduction to DevOps': 'Cloud Computing',
   'Meta Database Engineer': 'Data & AI',
   'Meta Data Analyst': 'Data & AI',
   'Google IT Support Professional Certificate': 'IT Support',
@@ -59,10 +71,22 @@ const CATEGORY_MAP: Record<string, string> = {
 const LEVEL_MAP: Record<string, string> = {
   'Cisco Certified Network Professional Routing and Switching': 'Advanced',
   'Cisco Certified Network Associate Routing and Switching': 'Associate',
+  'Claude Code in Action': 'Intermediate',
+  'Claude Platform 101': 'Foundational',
+  'Introduction to Claude Cowork': 'Foundational',
+  'Claude 101': 'Foundational',
+  'Claude Code 101': 'Foundational',
+  'Model Context Protocol: Advanced Topics': 'Advanced',
+  'AI Fluency: Framework and Foundations': 'Foundational',
+  'AI Fluency for Educators': 'Intermediate',
+  'AI Fluency for Students': 'Foundational',
   'IBM Cybersecurity Analyst Professional': 'Professional',
   'Penetration Testing, Threat Hunting, and Cryptography': 'Advanced',
   'Python for Data Science, AI & Development': 'Intermediate',
   'Introduction to Cloud Computing': 'Foundational',
+  'Cloud Data Engineering': 'Intermediate',
+  'Get Started with Cloud Native, DevOps, Agile, and NoSQL': 'Foundational',
+  'Introduction to DevOps': 'Foundational',
   'Meta Database Engineer': 'Professional',
   'Meta Data Analyst': 'Professional',
   'Google IT Support Professional Certificate': 'Professional',
@@ -76,6 +100,7 @@ const LEVEL_MAP: Record<string, string> = {
 
 const ISSUER_COLOR_MAP: Record<string, string> = {
   Cisco: '#1ba0d7',
+  Anthropic: '#d9b48f',
   IBM: '#0f62fe',
   Meta: '#0082fb',
   Google: '#ea4335',
@@ -122,7 +147,7 @@ const CERT_CARDS: CertCard[] = credentialsConfig.certifications.map((c) => {
   };
 });
 
-const ALL_CATEGORIES = ['All Certifications', 'Networking', 'Cybersecurity', 'Cloud Computing', 'Data & AI', 'IT Support', 'Leadership & Skills'];
+const ALL_CATEGORIES = ['All Certifications', 'Networking', 'Cybersecurity', 'Cloud Computing', 'AI & Agents', 'Data & AI', 'IT Support', 'Leadership & Skills'];
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest First' },

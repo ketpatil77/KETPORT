@@ -150,7 +150,7 @@ function answerByIntent(normalized: string): string | undefined {
   }
 
   if (includesAny(normalized, ['when', 'timeline', 'year', 'latest'])) {
-    return 'Recent timeline: Projects mainly in 2026; certifications from 2024 to Nov 2025; publications in March 2026, April 2026, and May 2026.';
+    return 'Recent timeline: Projects mainly in 2026; certifications from 2024 to Oct 2026; publications in March 2026, April 2026, and May 2026.';
   }
 
   if (includesAny(normalized, ['help', 'what can you answer', 'what can you do'])) {
